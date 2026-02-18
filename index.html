@@ -469,7 +469,7 @@ function downloadCSV() {
 const legend = L.control({position: 'bottomright'});
 legend.onAdd = function() {
   const div = L.DomUtil.create('div', 'legend');
-  L.DomUtil.disableClickPropagation(div);
+  L.DomEvent.disableClickPropagation(div);
 
   div.innerHTML = '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
   div.innerHTML += '<h3>Categories</h3>';
