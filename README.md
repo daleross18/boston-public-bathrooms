@@ -61,6 +61,33 @@ Best year-round options:
 - `cambridge_runner_bathrooms.txt` - Text guide with all location details
 - `README.md` - This file
 
+## 📱 Import to Google Maps
+
+Want to save these bathrooms to your Google Maps? It's easy:
+
+### Quick Import (2 minutes)
+
+1. **Download the list**: Click the "📥 Download for Google Maps" button on the map
+2. **Open Google My Maps**: Go to [mymaps.google.com](https://mymaps.google.com) on your phone or computer
+3. **Create a new map**: Click "+ Create a new map"
+4. **Import locations**:
+   - Click the "Import" button (looks like an arrow pointing up)
+   - Select the `boston-bathrooms.csv` file you just downloaded
+5. **Done!** All 103 bathrooms now appear on your saved map
+
+### On Mobile (Google Maps App)
+1. Download the CSV file (see above)
+2. Open Google Maps app
+3. Tap your profile picture → "Your places" → "Saved"
+4. Create a new list or add to existing
+5. Or: Open the CSV file with Google My Maps and it will auto-import
+
+### What You Get
+- All 103 bathroom locations with exact coordinates
+- Operating hours for each location
+- Full address and accessibility details
+- Easy to filter and search on your phone while running
+
 ## Map Features
 
 ### Filtering
