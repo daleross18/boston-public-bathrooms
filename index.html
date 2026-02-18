@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Runner Bathroom Map - Cambridge/Boston</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  #map { height: 100vh; width: 100%; }
+  .legend {
+    background: white; padding: 12px 16px; border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); line-height: 1.6; font-size: 13px;
+    max-height: 70vh; overflow-y: auto;
+  }
+  .legend h3 { margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 4px 6px; border-radius: 4px; transition: background-color 0.2s;
+    margin-bottom: 2px;
+  }
+  .legend-item:hover { background-color: rgba(0,0,0,0.05); }
+  .legend-dot {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; color: white;
+    text-shadow: 0 0 2px rgba(0,0,0,0.8);
+    transition: opacity 0.2s;
+  }
+  .legend-item.dimmed .legend-dot {
+    opacity: 0.3;
+  }
+  .legend-item.dimmed { opacity: 0.5; }
+  .legend-separator {
+    border-top: 1px solid #ddd; margin: 8px 0; padding-top: 8px;
+  }
+  .leaflet-popup-content { font-size: 13px; line-height: 1.5; max-width: 280px; }
+  .popup-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .popup-tag {
+    display: inline-block; padding: 1px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 600; margin-bottom: 4px;
+  }
+  .tag-yearround { background: #d4edda; color: #155724; }
+  .tag-seasonal { background: #fff3cd; color: #856404; }
+  .tag-24hr { background: #cce5ff; color: #004085; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+const locations = [
+  // Parks
+  {id:1, name:"Magazine Beach", lat:42.3558, lng:-71.1154, cat:"parks", seasonal:true,
+   desc:"668 Memorial Dr. Restrooms at park pavilion. Bath house (719 Memorial Dr) in summer.", hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:2, name:"MIT Sailing Pavilion", lat:42.3592, lng:-71.0876, cat:"recreation_centers", seasonal:true,
+   desc:"135 Memorial Dr. Porta-potties near dock area.", hours:"Seasonal: spring-fall"},
+  {id:3, name:"Cambridge Boat Club / Eliot Bridge", lat:42.3717, lng:-71.1329, cat:"recreation_centers", seasonal:true,
+   desc:"Portable restrooms + water cooler near kayak/boat rental, west of Eliot Bridge.", hours:"Seasonal: spring-fall"},
+  {id:4, name:"Weeks Footbridge area", lat:42.3685, lng:-71.1178, cat:"parks", seasonal:true,
+   desc:"Portable restrooms on Cambridge side, adjacent to recreation fields.", hours:"Seasonal"},
+  {id:5, name:"Charles River Canoe & Kayak", lat:42.3690, lng:-71.1312, cat:"recreation_centers", seasonal:true,
+   desc:"1071 Soldiers Field Rd. Porta-potties when open.", hours:"Seasonal: spring-fall"},
+  {id:6, name:"Shannon Beach", lat:42.3648, lng:-71.1365, cat:"parks", seasonal:true,
+   desc:"Near Soldiers Field Rd. Portable toilets in summer.", hours:"Seasonal: summer"},
+
+  // Parks & Recreation
+  {id:7, name:"DCR Hatch Shell", lat:42.3573, lng:-71.0737, cat:"parks", seasonal:true,
+   desc:"Behind the shell, near Fielder Footbridge. Public restrooms + accessible portables.", hours:"Seasonal: mid-Apr to mid-Oct, dawn-dusk"},
+  {id:8, name:"Dartmouth St. Facility", lat:42.3551, lng:-71.0779, cat:"parks", seasonal:true,
+   desc:"Next to Dartmouth St. Footbridge. Public restrooms.", hours:"Seasonal: dawn-dusk"},
+  {id:9, name:"Teddy Ebersol Red Sox Fields", lat:42.3637, lng:-71.0719, cat:"sports_fields", seasonal:true,
+   desc:"Portable restrooms adjacent to the fields.", hours:"Seasonal"},
+  {id:10, name:"Alfond Memorial Spray Deck", lat:42.3651, lng:-71.0700, cat:"parks", seasonal:true,
+   desc:"Portable restrooms nearby.", hours:"Seasonal"},
+  {id:11, name:"Charlesbank / Smith Pavilion", lat:42.3637, lng:-71.0712, cat:"parks", seasonal:false,
+   desc:"Near Science Museum / Longfellow Bridge. New year-round restrooms coming. Check esplanade.org.", hours:"Coming soon - year-round"},
+  {id:12, name:"Community Boating", lat:42.3598, lng:-71.0731, cat:"recreation_centers", seasonal:true,
+   desc:"21 David G. Mugar Way. Restrooms when boathouse is open.", hours:"Seasonal"},
+  {id:13, name:"Artesani Park", lat:42.3643, lng:-71.1378, cat:"parks", seasonal:true,
+   desc:"1255 Soldiers Field Rd, Brighton. Porta-potties + water/bathrooms in summer.", hours:"Seasonal: summer"},
+  {id:14, name:"BU Bridge area", lat:42.3530, lng:-71.1080, cat:"parks", seasonal:true,
+   desc:"Near Storrow Dr path. Portable restrooms near recreation fields.", hours:"Seasonal"},
+
+  // Parks & Nature
+  {id:15, name:"Fresh Pond Ranger Station", lat:42.3846, lng:-71.1495, cat:"parks", seasonal:false,
+   desc:"250 Fresh Pond Pkwy. Restrooms under clock tower.", hours:"Year-round: 7am-5pm daily"},
+  {id:16, name:"Maynard Ecology Center", lat:42.3897, lng:-71.1486, cat:"recreation_centers", seasonal:false,
+   desc:"Fresh Pond Reservation. Restrooms during building hours.", hours:"Year-round: building hours"},
+
+  // Parks & Recreation
+  {id:17, name:"Jamaica Pond Boathouse", lat:42.3159, lng:-71.1175, cat:"recreation_centers", seasonal:false,
+   desc:"507 Jamaicaway. Wheelchair accessible restrooms.", hours:"Year-round: dawn-dusk"},
+  {id:18, name:"Arnold Arboretum - Hunnewell", lat:42.3074, lng:-71.1208, cat:"parks", seasonal:false,
+   desc:"125 Arborway. Restrooms in the Hunnewell Building.", hours:"Year-round: 10am-4pm daily"},
+  {id:19, name:"Arnold Arboretum - Arborway Gate portables", lat:42.2985, lng:-71.1230, cat:"parks", seasonal:false,
+   desc:"Accessible porta-potties near Arborway Gate, Hemlock Hill Rd, and Peters Hill.", hours:"Year-round"},
+  {id:20, name:"Olmsted Park / Leverett Pond", lat:42.3270, lng:-71.1160, cat:"parks", seasonal:true,
+   desc:"Portable restrooms in summer. Limited options.", hours:"Seasonal: summer"},
+  {id:21, name:"Franklin Park Golf Club House", lat:42.3011, lng:-71.0885, cat:"sports_fields", seasonal:true,
+   desc:"William J. Devine Golf Course. Restrooms during golf season.", hours:"Seasonal"},
+  {id:22, name:"Franklin Park Zoo", lat:42.3028, lng:-71.0876, cat:"attractions", seasonal:false,
+   desc:"1 Franklin Park Rd. Restrooms inside (requires admission).", hours:"Year-round (admission req)"},
+
+  // Harvard
+  {id:23, name:"Harvard Sq Portland Loo", lat:42.3735, lng:-71.1189, cat:"university", seasonal:false, is24hr:true,
+   desc:"Small park between Cambridge Common and Harvard Sq. Standalone outdoor unit.", hours:"24/7/365"},
+  {id:24, name:"Harvard Smith Campus Center", lat:42.3723, lng:-71.1187, cat:"university", seasonal:false,
+   desc:"1350 Mass Ave. Public restrooms 1st floor + single-use 2nd floor. Walk right in.", hours:"Year-round: business hours"},
+  {id:25, name:"Harvard Yard / Widener Library", lat:42.3738, lng:-71.1165, cat:"university", seasonal:false,
+   desc:"Most libraries need Harvard ID. Use Smith Campus Center instead.", hours:"Harvard ID required"},
+  {id:26, name:"Cambridge Common Portland Loo", lat:42.3767, lng:-71.1210, cat:"university", seasonal:false, is24hr:true,
+   desc:"1500 Mass Ave. Portland Loo public toilet.", hours:"24/7/365"},
+
+  // MIT
+  {id:27, name:"MIT Stata Center (Bldg 32)", lat:42.3616, lng:-71.0911, cat:"university", seasonal:false,
+   desc:"32 Vassar St. Lobby/2nd floor open to public. Ground floor restrooms.", hours:"Year-round: M-F 6am-7pm"},
+  {id:28, name:"MIT Student Center (W20)", lat:42.3590, lng:-71.0948, cat:"university", seasonal:false,
+   desc:"84 Mass Ave. Open to public daytime. Restrooms on multiple floors.", hours:"Year-round: daytime"},
+  {id:29, name:"MIT Building 7 (Infinite Corridor)", lat:42.3593, lng:-71.0934, cat:"university", seasonal:false,
+   desc:"77 Mass Ave. Main entrance open weekdays. Restrooms off main corridor.", hours:"Year-round: M-F 6am-7pm"},
+
+  // Public Buildings
+  {id:30, name:"Cambridge City Hall", lat:42.3671, lng:-71.1056, cat:"public_bldg", seasonal:false,
+   desc:"795 Mass Ave (Central Square). Public restrooms.", hours:"Year-round: weekday business hrs"},
+  {id:31, name:"Cambridge City Hall Annex", lat:42.3704, lng:-71.1032, cat:"public_bldg", seasonal:false,
+   desc:"345 Broadway. Public restrooms.", hours:"Year-round: business hours"},
+  {id:32, name:"Cambridge Public Library (Main)", lat:42.3740, lng:-71.1105, cat:"public_bldg", seasonal:false,
+   desc:"449 Broadway. Restrooms on multiple floors.", hours:"M-Th 9am-9pm, F-Sa 9-5, Su 1-5"},
+  {id:33, name:"Boudreau Branch Library", lat:42.3834, lng:-71.1326, cat:"public_bldg", seasonal:false,
+   desc:"245 Concord Ave. Near Fresh Pond.", hours:"Year-round: library hours"},
+  {id:34, name:"War Memorial Rec Center", lat:42.3738, lng:-71.1105, cat:"public_bldg", seasonal:false,
+   desc:"459 Broadway (Cambridge Rindge & Latin). Public restrooms.", hours:"Year-round: open hours"},
+
+  // Hospitals
+  {id:35, name:"CHA Cambridge Hospital", lat:42.3752, lng:-71.1048, cat:"hospital", seasonal:false, is24hr:true,
+   desc:"1493 Cambridge St. Reception 6am-8pm. ER 24 hours.", hours:"Reception 6am-8pm / ER 24hr"},
+  {id:36, name:"CHA Windsor St Health Center", lat:42.3647, lng:-71.0968, cat:"hospital", seasonal:false,
+   desc:"119 Windsor St (near Central Sq).", hours:"M-F 7am-9pm, Sat 9am-3pm"},
+  {id:37, name:"CHA Cambridge Family Health", lat:42.3740, lng:-71.1009, cat:"hospital", seasonal:false,
+   desc:"237 Hampshire St (Inman/Central).", hours:"Mon 8:30am-8pm, Tu-F 8:30-5"},
+  {id:38, name:"CHA East Cambridge Health Ctr", lat:42.3731, lng:-71.0854, cat:"hospital", seasonal:false,
+   desc:"163 Gore St.", hours:"Weekday afternoons/evenings"},
+  {id:39, name:"CHA Family Health North", lat:42.3916, lng:-71.1233, cat:"hospital", seasonal:false,
+   desc:"2067 Mass Ave (Porter Sq).", hours:"Weekday business hours"},
+  {id:40, name:"Mount Auburn Hospital", lat:42.3741, lng:-71.1342, cat:"hospital", seasonal:false, is24hr:true,
+   desc:"330 Mount Auburn St. Main lobby restrooms.", hours:"24 hours"},
+  {id:41, name:"Beth Israel Deaconess", lat:42.3398, lng:-71.1049, cat:"hospital", seasonal:false,
+   desc:"330 Brookline Ave. Near Emerald Necklace.", hours:"Year-round: lobby hours"},
+  {id:42, name:"Boston Children's Hospital", lat:42.3381, lng:-71.1060, cat:"hospital", seasonal:false,
+   desc:"300 Longwood Ave. Near Emerald Necklace/Riverway.", hours:"Year-round: lobby hours"},
+  {id:43, name:"Brigham and Women's Hospital", lat:42.3362, lng:-71.1070, cat:"hospital", seasonal:false,
+   desc:"75 Francis St. Near Emerald Necklace/Riverway.", hours:"Year-round: lobby hours"},
+
+  // MBTA
+  {id:44, name:"Harvard Station (Red Line)", lat:42.3733, lng:-71.1206, cat:"transit", seasonal:false,
+   desc:"Restroom outside fare gates.", hours:"During service hours"},
+  {id:45, name:"Kendall/MIT Station (Red Line)", lat:42.3627, lng:-71.0862, cat:"transit", seasonal:false,
+   desc:"Restroom available.", hours:"During service hours"},
+
+  // Central Square & Parks
+  {id:47, name:"Central Sq Portland Loo", lat:42.3653, lng:-71.1036, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"Near Central Square T stop. Standalone outdoor unit.", hours:"24/7"},
+  {id:48, name:"Starlight Square / Carl Barron Plaza", lat:42.3648, lng:-71.1038, cat:"parks", seasonal:true,
+   desc:"Mass Ave at Central Sq. Portable restrooms during programming.", hours:"Seasonal"},
+  {id:49, name:"Sennott Park", lat:42.3685, lng:-71.1000, cat:"parks", seasonal:true,
+   desc:"305 Broadway (at Norfolk St). Portable restrooms. Near Central Square.", hours:"Seasonal"},
+
+  // Attractions & Other
+  {id:50, name:"New England Aquarium", lat:42.3554, lng:-71.0504, cat:"attractions", seasonal:false,
+   desc:"1 Central Wharf. Lobby restrooms (admission may be required).", hours:"Year-round"},
+  {id:51, name:"Boston Common / Public Garden", lat:42.3550, lng:-71.0661, cat:"parks", seasonal:true,
+   desc:"Portable restrooms in park. Visitor center may be year-round.", hours:"Mostly seasonal"},
+  {id:52, name:"CambridgeSide", lat:42.3688, lng:-71.0760, cat:"other", seasonal:false,
+   desc:"100 CambridgeSide Pl. Mall restrooms. Easy from Charles River path.", hours:"Year-round: mall hours"},
+  {id:53, name:"Museum of Science", lat:42.3674, lng:-71.0711, cat:"attractions", seasonal:false,
+   desc:"1 Museum of Science Dr. Lobby restrooms. On Charles River Dam.", hours:"Year-round: museum hours"},
+  {id:54, name:"Whole Foods (River St)", lat:42.3610, lng:-71.1140, cat:"other", seasonal:false,
+   desc:"Customer restrooms, generally accessible. Near Central Sq.", hours:"Year-round: store hours"},
+  {id:55, name:"Charles Hotel", lat:42.3723, lng:-71.1222, cat:"other", seasonal:false,
+   desc:"Harvard Sq. Walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+
+  // Boston Public Restrooms (from boston.gov)
+  {id:56, name:"Boston Public Library - Central", lat:42.3494, lng:-71.0784, cat:"public_bldg", seasonal:false,
+   desc:"700 Boylston St (Back Bay). Major branch with multiple restrooms.", hours:"M-Th 9am-9pm, F-Sa 9am-5pm, Su 1-5pm"},
+  {id:57, name:"Faneuil Hall", lat:42.3636, lng:-71.0550, cat:"attractions", seasonal:false,
+   desc:"4 S. Market St (Downtown). Historic marketplace with public restrooms.", hours:"Year-round: marketplace hours"},
+  {id:58, name:"Boston City Hall", lat:42.3588, lng:-71.0576, cat:"public_bldg", seasonal:false,
+   desc:"1 City Hall Square (Downtown). Government building with public restrooms.", hours:"Year-round: weekday business hours"},
+  {id:59, name:"Boston Harbor Hotel", lat:42.3575, lng:-71.0452, cat:"other", seasonal:false,
+   desc:"70 Rowes Wharf (Waterfront). Upscale hotel - walk in lobby.", hours:"Year-round: 24hr lobby"},
+  {id:60, name:"Boston Public Library - Charlestown", lat:42.3783, lng:-71.0594, cat:"public_bldg", seasonal:false,
+   desc:"179 Main St (Charlestown). Branch library near Bunker Hill.", hours:"Library hours"},
+  {id:61, name:"Boston Public Library - East Boston", lat:42.3840, lng:-71.0298, cat:"public_bldg", seasonal:false,
+   desc:"365 Bremen St (East Boston). Neighborhood library branch.", hours:"Library hours"},
+  {id:62, name:"Constitution Beach", lat:42.3844, lng:-71.0098, cat:"parks", seasonal:true,
+   desc:"East Boston waterfront beach with seasonal facilities.", hours:"Seasonal: summer months"},
+  {id:63, name:"BCYF Curley Recreation Center", lat:42.3315, lng:-71.0524, cat:"recreation_centers", seasonal:false,
+   desc:"1663 Columbia Rd (South Boston). City recreation facility.", hours:"Year-round: facility hours"},
+  {id:64, name:"Boston Public Library - South Boston", lat:42.3354, lng:-71.0511, cat:"public_bldg", seasonal:false,
+   desc:"646 East Broadway (South Boston). Neighborhood branch.", hours:"Library hours"},
+  {id:65, name:"Carson Beach", lat:42.3298, lng:-71.0487, cat:"parks", seasonal:true,
+   desc:"165 William J. Day Blvd (South Boston). Summer beach facility.", hours:"Seasonal: summer months"},
+  {id:66, name:"Boston Fire Dept District 4", lat:42.3403, lng:-71.0748, cat:"public_bldg", seasonal:false,
+   desc:"200 Columbus Ave (Back Bay). Fire station with public access.", hours:"Year-round: daytime hours"},
+
+  // Additional Boston Locations - North End & Downtown
+  {id:67, name:"DCR Steriti Memorial Rink", lat:42.3743, lng:-71.0536, cat:"recreation_centers", seasonal:false,
+   desc:"561 Commercial St (North End). Ice skating rink with public restrooms.", hours:"Year-round: facility hours"},
+  {id:68, name:"BCYF Nazzaro Pool", lat:42.3728, lng:-71.0546, cat:"recreation_centers", seasonal:false,
+   desc:"30 North Bennet St (North End). Recreation pool facility.", hours:"Year-round: pool hours"},
+  {id:69, name:"Boston Public Library - North End", lat:42.3667, lng:-71.0530, cat:"public_bldg", seasonal:false,
+   desc:"25 Parmenter St (North End). Library branch.", hours:"Library hours"},
+  {id:70, name:"City Toilet - City Hall Plaza", lat:42.3593, lng:-71.0580, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"1 City Hall Square (Downtown). Standalone public toilet unit.", hours:"24/7"},
+  {id:71, name:"City Toilet - Atlantic Ave", lat:42.3580, lng:-71.0510, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"206 Atlantic Ave (Downtown). Standalone public toilet unit.", hours:"24/7"},
+  {id:72, name:"City Toilet - Long Wharf", lat:42.3595, lng:-71.0495, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"2 Long Wharf (Waterfront). Standalone public toilet unit.", hours:"24/7"},
+  {id:73, name:"Boston Public Library - Chinatown", lat:42.3528, lng:-71.0629, cat:"public_bldg", seasonal:false,
+   desc:"2 Boylston St (Chinatown). Library branch.", hours:"Library hours"},
+  {id:74, name:"Boston Public Library - South End", lat:42.3451, lng:-71.0743, cat:"public_bldg", seasonal:false,
+   desc:"685 Tremont St (South End). Library branch.", hours:"Library hours"},
+  {id:75, name:"Boston Public Library - West End", lat:42.3660, lng:-71.0644, cat:"public_bldg", seasonal:false,
+   desc:"151 Cambridge St (West End). Library branch.", hours:"Library hours"},
+  {id:76, name:"Boston Fire Dept District 4 Engine 33", lat:42.3481, lng:-71.0857, cat:"public_bldg", seasonal:false,
+   desc:"941 Boylston St (Back Bay). Fire station with public access.", hours:"Year-round: daytime hours"},
+
+  // Charlestown Additions
+  {id:77, name:"BCYF Clougherty Pool", lat:42.3808, lng:-71.0610, cat:"recreation_centers", seasonal:false,
+   desc:"331 Bunker Hill St (Charlestown). Community pool facility.", hours:"Year-round: pool hours"},
+  {id:78, name:"BCYF Golden Age Center", lat:42.3778, lng:-71.0596, cat:"recreation_centers", seasonal:false,
+   desc:"382 Main St (Charlestown). Recreation center.", hours:"Year-round: facility hours"},
+  {id:79, name:"City Toilet - Charlestown", lat:42.3834, lng:-71.0614, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"197 Eighth St (Charlestown). Standalone public toilet unit.", hours:"24/7"},
+  {id:80, name:"Spaulding Rehab Hospital Boston", lat:42.3789, lng:-71.0492, cat:"hospital", seasonal:false,
+   desc:"300 1st Ave (Charlestown). Hospital with public restroom access.", hours:"Year-round: lobby hours"},
+  {id:81, name:"Charlestown Marina", lat:42.3745, lng:-71.0494, cat:"recreation_centers", seasonal:false,
+   desc:"1 Pier 8 (Charlestown). Marina facility with restrooms.", hours:"Year-round: facility hours"},
+
+  // East Boston
+  {id:82, name:"BCYF Paris Street", lat:42.3839, lng:-71.0304, cat:"recreation_centers", seasonal:false,
+   desc:"112 Paris St (East Boston). Recreation center.", hours:"Year-round: facility hours"},
+  {id:83, name:"Piers Park", lat:42.3815, lng:-71.0237, cat:"parks", seasonal:false,
+   desc:"211-255 Marginal St (East Boston). Waterfront park with restrooms.", hours:"Year-round: dawn-dusk"},
+
+  // Fort Point Channel
+  {id:84, name:"Boston Children's Museum", lat:42.3510, lng:-71.0432, cat:"attractions", seasonal:false,
+   desc:"308 Congress St (Fort Point). Museum with restrooms.", hours:"Year-round: museum hours"},
+  {id:85, name:"Institute of Contemporary Art", lat:42.3529, lng:-71.0430, cat:"attractions", seasonal:false,
+   desc:"25 Harbor Shore Dr (Seaport). Art museum with public restrooms.", hours:"Year-round: museum hours"},
+
+  // Dorchester & Adjacent
+  {id:86, name:"BCYF Grove Hall", lat:42.3253, lng:-71.0847, cat:"recreation_centers", seasonal:false,
+   desc:"51 Geneva Ave (Dorchester). Recreation center.", hours:"Year-round: facility hours"},
+  {id:87, name:"Boston Public Library - Grove Hall", lat:42.3244, lng:-71.0854, cat:"public_bldg", seasonal:false,
+   desc:"41 Geneva Ave (Dorchester). Library branch.", hours:"Library hours"},
+
+  // South Boston Additional
+  {id:88, name:"BCYF South Boston Senior Center", lat:42.3305, lng:-71.0525, cat:"recreation_centers", seasonal:false,
+   desc:"1663 Columbia Rd (South Boston). Community facility.", hours:"Year-round: facility hours"},
+  {id:89, name:"City Toilet - Drydock Ave", lat:42.3494, lng:-71.0467, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"12 Drydock Ave (South Boston). Standalone public toilet unit.", hours:"24/7"},
+  {id:90, name:"Castle Island", lat:42.3388, lng:-71.0111, cat:"parks", seasonal:false,
+   desc:"2010 William J Day Blvd (South Boston). Historic park with restrooms.", hours:"Year-round: dawn-dusk"},
+
+  // Brookline
+  {id:91, name:"Brookline Public Library (Main)", lat:42.3344, lng:-71.1217, cat:"public_bldg", seasonal:false,
+   desc:"361 Washington St (Brookline Village). Main library with public restrooms on multiple floors.", hours:"M-Th 9am-9pm, F-Sa 9am-5pm, Su 1-5pm"},
+  {id:92, name:"Brookline Public Library (Coolidge Corner)", lat:42.3421, lng:-71.1213, cat:"public_bldg", seasonal:false,
+   desc:"31 Pleasant St (Coolidge Corner). Branch library with public restrooms.", hours:"Library hours"},
+  {id:93, name:"Brookline Town Hall", lat:42.3339, lng:-71.1206, cat:"public_bldg", seasonal:false,
+   desc:"333 Washington St (Brookline Village). Public restrooms during business hours.", hours:"M-Th 8am-5pm, F 8am-12:30pm"},
+  {id:94, name:"Brookline Public Safety Building", lat:42.3340, lng:-71.1204, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"350 Washington St (Brookline Village). Police headquarters with 24-hour accessible restrooms.", hours:"24 hours"},
+  {id:95, name:"Brookline High School (Tappan Gym)", lat:42.3320, lng:-71.1287, cat:"recreation_centers", seasonal:false,
+   desc:"66 Tappan St. Recreation facility with restrooms. Check for public hours.", hours:"Facility hours"},
+  {id:96, name:"Larz Anderson Park", lat:42.3125, lng:-71.1355, cat:"parks", seasonal:true,
+   desc:"Goddard Ave & Newton St. Park with restrooms available seasonally (spring-fall).", hours:"Seasonal: dawn-dusk"},
+  {id:97, name:"Harry Downes Field", lat:42.3246, lng:-71.1182, cat:"sports_fields", seasonal:true,
+   desc:"67 Highland Rd. Sports field with seasonal restroom facilities.", hours:"Seasonal: daytime hours"},
+  {id:98, name:"Amory Playground", lat:42.3460, lng:-71.1132, cat:"parks", seasonal:true,
+   desc:"45 Amory St. Playground with seasonal portable restrooms (spring-fall).", hours:"Seasonal: daytime hours"},
+
+  // Watertown / Brighton (west of Charles River)
+  {id:99, name:"Watertown Free Public Library", lat:42.3675, lng:-71.1868, cat:"public_bldg", seasonal:false,
+   desc:"123 Main St (Watertown). Public library with restrooms. Close to Charles River path.", hours:"M-Th 9am-9pm, F 9am-7pm, Sa 9am-5pm, Su 1-5pm"},
+  {id:100, name:"Saltonstall Park (Watertown)", lat:42.3687, lng:-71.1877, cat:"parks", seasonal:false,
+   desc:"149 Main St (Watertown). Park with restrooms in adjacent City Hall building. Event venue.", hours:"Year-round: City Hall hours M-Th 8am-5pm, F 8am-12:30pm"},
+  {id:101, name:"Oak Square YMCA", lat:42.3460, lng:-71.1395, cat:"recreation_centers", seasonal:false,
+   desc:"615 Washington St (Brighton). Full-service YMCA with pool and restrooms. Charles River nearby.", hours:"M-Th 6am-10pm, F 6am-7pm, Sa 7am-5pm, Su 8am-4pm"},
+  {id:102, name:"BILH Care Center - Watertown (Mt Auburn)", lat:42.3661, lng:-71.2070, cat:"hospital", seasonal:false,
+   desc:"480 Pleasant St (Watertown). Medical facility with urgent care and primary care. Restrooms available.", hours:"Primary Care M 8am-7pm Tu-F 8am-5pm, Urgent Care M-F 9am-7pm Sa-Su 9am-5pm"},
+  {id:103, name:"Brighton Branch Library", lat:42.3476, lng:-71.1525, cat:"public_bldg", seasonal:false,
+   desc:"40 Academy Hill Rd (Brighton). Boston Public Library branch with restrooms.", hours:"M 12-8pm, Tu-W 10-6, Th 12-8, F-Sa 9-5, Su Closed"}
+];
+
+// Colorblind-friendly palette (Okabe-Ito based)
+const catColors = {
+  university: "#CC79A7",      // mauve/pink - distinct
+  public_bldg: "#F0E442",     // yellow - very bright
+  hospital: "#D55E00",        // burnt orange - warm distinct
+  transit: "#000000",         // black - strong contrast
+  parks: "#E69F00",           // orange - warm
+  recreation_centers: "#56B4E9", // sky blue - cool distinct
+  sports_fields: "#009E73",   // teal/green - cool
+  attractions: "#0072B2",     // dark blue - different from sports
+  other: "#999999"            // gray - neutral
+};
+
+const catNames = {
+  university: "University Buildings",
+  public_bldg: "Public Buildings",
+  hospital: "Hospitals / Health Centers",
+  transit: "MBTA Stations",
+  parks: "Parks & Public Spaces",
+  recreation_centers: "Recreation Centers",
+  sports_fields: "Sports Facilities",
+  attractions: "Attractions (Museums, Zoo, etc)",
+  other: "Other (retail, hotels, etc.)"
+};
+
+const map = L.map('map').setView([42.3620, -71.1050], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map);
+
+const markers = [];
+const categoryVisible = {};
+Object.keys(catColors).forEach(c => categoryVisible[c] = true);
+
+let seasonalVisible = true;
+let yearRoundVisible = true;
+
+function createIcon(color, is24hr, catKey) {
+  const size = is24hr ? 36 : 32;
+  const innerSize = is24hr ? 28 : 24;
+
+  // Symbol mapping for different categories (for non-color-dependent identification)
+  const symbols = {
+    university: '🎓',
+    public_bldg: '🏛️',
+    hospital: '⊕',
+    transit: 'T',
+    parks: '🌳',
+    recreation_centers: '🏊',
+    sports_fields: '⚽',
+    attractions: '★',
+    other: '•'
+  };
+
+  const symbol = symbols[catKey] || '●';
+  const border = is24hr ? '3px solid #FFD700' : '2px solid rgba(255,255,255,0.9)';
+  const glow = is24hr
+    ? '0 0 8px rgba(255,215,0,0.6), 0 0 0 2px rgba(0,0,0,0.2)'
+    : '0 0 6px rgba(0,0,0,0.3)';
+
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:${size}px;
+      height:${size}px;
+      border-radius:50%;
+      background:${color};
+      border:${border};
+      box-shadow:${glow};
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:${is24hr ? '18px' : '16px'};
+      font-weight:bold;
+      color:white;
+      text-shadow: 0 0 2px rgba(0,0,0,0.8);
+      flex-shrink:0;
+    ">${symbol}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2]
+  });
+}
+
+locations.forEach(loc => {
+  const color = catColors[loc.cat];
+  const icon = createIcon(color, loc.is24hr, loc.cat);
+  const seasonTag = loc.seasonal
+    ? '<span class="popup-tag tag-seasonal">SEASONAL</span>'
+    : '<span class="popup-tag tag-yearround">YEAR-ROUND</span>';
+  const hrTag = loc.is24hr ? ' <span class="popup-tag tag-24hr">24 HR</span>' : '';
+
+  const popup = `
+    <div class="popup-title">#${loc.id} ${loc.name}</div>
+    ${seasonTag}${hrTag}<br>
+    ${loc.desc}<br>
+    <strong>Hours:</strong> ${loc.hours}<br>
+    <em style="font-size:11px;color:#666;">${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}</em>
+  `;
+
+  const marker = L.marker([loc.lat, loc.lng], {icon})
+    .bindPopup(popup);
+  marker._locData = loc;
+  marker.addTo(map);
+  markers.push(marker);
+});
+
+function updateVisibility() {
+  markers.forEach(m => {
+    const loc = m._locData;
+    const catOk = categoryVisible[loc.cat];
+    const seaOk = loc.seasonal ? seasonalVisible : yearRoundVisible;
+    if (catOk && seaOk) {
+      m.addTo(map);
+    } else {
+      map.removeLayer(m);
+    }
+  });
+}
+
+// Legend
+const symbols = {
+  university: '🎓',
+  public_bldg: '🏛️',
+  hospital: '⊕',
+  transit: 'T',
+  parks: '🌳',
+  recreation_centers: '🏊',
+  sports_fields: '⚽',
+  attractions: '★',
+  other: '•'
+};
+
+const legend = L.control({position: 'bottomright'});
+legend.onAdd = function() {
+  const div = L.DomUtil.create('div', 'legend');
+  L.DomEvent.disableClickPropagation(div);
+
+  div.innerHTML = '<h3>Categories</h3>';
+
+  Object.keys(catColors).forEach(cat => {
+    const symbol = symbols[cat];
+    const itemHtml = `<div class="legend-item" data-cat="${cat}">
+      <div class="legend-dot" style="background:${catColors[cat]}">${symbol}</div>
+      ${catNames[cat]}
+    </div>`;
+    div.innerHTML += itemHtml;
+  });
+
+  div.innerHTML += '<div class="legend-separator"></div>';
+  div.innerHTML += '<h3 style="margin-bottom: 6px; margin-top: 0;">Amenities</h3>';
+  div.innerHTML += '<div class="legend-item"><div class="legend-dot" style="background:#666;border:3px solid #FFD700;">✓</div>24-hour access</div>';
+
+  div.innerHTML += '<div class="legend-separator"></div>';
+  div.innerHTML += '<h3 style="margin-bottom: 6px; margin-top: 0;">Filters</h3>';
+  div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Year-round</div>';
+  div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Seasonal</div>';
+
+  // Add click handlers to categories
+  div.querySelectorAll('[data-cat]').forEach(item => {
+    item.addEventListener('click', function() {
+      const cat = this.dataset.cat;
+      categoryVisible[cat] = !categoryVisible[cat];
+      this.classList.toggle('dimmed');
+      updateVisibility();
+    });
+  });
+
+  // Add click handlers to toggle filters
+  div.querySelectorAll('[data-toggle]').forEach(item => {
+    const checkbox = item.querySelector('input');
+    item.addEventListener('click', function(e) {
+      if (e.target === checkbox) return; // Let checkbox handle its own click
+      checkbox.checked = !checkbox.checked;
+      checkbox.dispatchEvent(new Event('change'));
+    });
+    checkbox.addEventListener('change', function() {
+      const toggle = this.parentElement.dataset.toggle;
+      if (toggle === 'yearround') {
+        yearRoundVisible = this.checked;
+      } else if (toggle === 'seasonal') {
+        seasonalVisible = this.checked;
+      }
+      updateVisibility();
+    });
+  });
+
+  return div;
+};
+legend.addTo(map);
+
+</script>
+</body>
+</html>
