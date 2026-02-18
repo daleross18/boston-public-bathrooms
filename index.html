@@ -574,6 +574,7 @@ const legend = L.control({position: 'bottomright'});
 legend.onAdd = function() {
   const div = L.DomUtil.create('div', 'legend');
   L.DomEvent.disableClickPropagation(div);
+  L.DomEvent.disableScrollPropagation(div);
 
   div.innerHTML = '<h3>Categories</h3>';
 
