@@ -93,8 +93,12 @@
     width: 36px; height: 4px; border-radius: 2px;
     background: #ccc; margin: 4px auto 12px;
   }
+  .legend-sheet .sheet-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .legend-sheet .sheet-header h3 { margin: 0; font-size: 15px; font-weight: 600; }
   .legend-sheet .sheet-close {
-    position: absolute; top: 12px; right: 16px;
     background: none; border: none; font-size: 22px;
     color: #666; cursor: pointer; padding: 4px 8px;
     -webkit-tap-highlight-color: transparent;
@@ -130,7 +134,10 @@
 <div class="legend-overlay" id="legendOverlay"></div>
 <div class="legend-sheet" id="legendSheet">
   <div class="sheet-handle"></div>
-  <button class="sheet-close" id="sheetClose" aria-label="Close">✕</button>
+  <div class="sheet-header">
+    <h3>Filters & Legend</h3>
+    <button class="sheet-close" id="sheetClose" aria-label="Close">✕</button>
+  </div>
   <div id="sheetContent"></div>
 </div>
 
@@ -568,8 +575,7 @@ legend.onAdd = function() {
   const div = L.DomUtil.create('div', 'legend');
   L.DomEvent.disableClickPropagation(div);
 
-  div.innerHTML = '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
-  div.innerHTML += '<h3>Categories</h3>';
+  div.innerHTML = '<h3>Categories</h3>';
 
   Object.keys(catColors).forEach(cat => {
     const symbol = symbols[cat];
@@ -588,6 +594,9 @@ legend.onAdd = function() {
   div.innerHTML += '<h3 style="margin-bottom: 6px; margin-top: 0;">Filters</h3>';
   div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Year-round</div>';
   div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Seasonal</div>';
+
+  div.innerHTML += '<div class="legend-separator"></div>';
+  div.innerHTML += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
 
   // Add click handlers to categories
   div.querySelectorAll('[data-cat]').forEach(item => {
@@ -652,8 +661,7 @@ legend.addTo(map);
   }
 
   function buildSheetContent() {
-    let html = '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
-    html += '<h3 style="margin-bottom:8px;font-size:14px;font-weight:600;">Categories</h3>';
+    let html = '<h3 style="margin-bottom:8px;font-size:14px;font-weight:600;">Categories</h3>';
 
     Object.keys(catColors).forEach(cat => {
       const symbol = symbols[cat];
@@ -671,6 +679,8 @@ legend.addTo(map);
     html += '<h3 style="margin-bottom:6px;font-size:14px;font-weight:600;">Filters</h3>';
     html += `<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor:pointer;"><input type="checkbox" ${yearRoundVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Year-round</div>`;
     html += `<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor:pointer;"><input type="checkbox" ${seasonalVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Seasonal</div>`;
+    html += '<div class="legend-separator"></div>';
+    html += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
 
     sheetContent.innerHTML = html;
 
