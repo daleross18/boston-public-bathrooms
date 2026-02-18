@@ -53,10 +53,87 @@
   .tag-yearround { background: #d4edda; color: #155724; }
   .tag-seasonal { background: #fff3cd; color: #856404; }
   .tag-24hr { background: #cce5ff; color: #004085; }
+
+  /* Mobile toggle button (hidden on desktop) */
+  .legend-toggle-btn {
+    display: none;
+    position: fixed; bottom: 20px; right: 16px; z-index: 1000;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: #4285F4; color: white; border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 22px; cursor: pointer;
+    align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .legend-toggle-btn:active { background: #3367D6; }
+
+  /* Mobile bottom sheet overlay */
+  .legend-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1001;
+    background: rgba(0,0,0,0.4);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Mobile bottom sheet */
+  .legend-sheet {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1002;
+    background: white;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    max-height: 70vh; overflow-y: auto;
+    padding: 8px 16px 24px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    -webkit-overflow-scrolling: touch;
+  }
+  .legend-sheet.open { transform: translateY(0); }
+  .legend-sheet .sheet-handle {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: #ccc; margin: 4px auto 12px;
+  }
+  .legend-sheet .sheet-close {
+    position: absolute; top: 12px; right: 16px;
+    background: none; border: none; font-size: 22px;
+    color: #666; cursor: pointer; padding: 4px 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .legend-sheet .legend-item {
+    padding: 10px 8px;
+    margin-bottom: 0;
+  }
+  .legend-sheet .download-btn {
+    padding: 14px 16px; font-size: 15px;
+  }
+
+  @media (max-width: 640px) {
+    /* Hide the Leaflet legend control on mobile */
+    .legend { display: none !important; }
+
+    /* Show mobile UI */
+    .legend-toggle-btn { display: flex; }
+
+    .leaflet-popup-content { max-width: 220px; font-size: 12px; }
+    .popup-title { font-size: 13px; }
+
+    /* Nudge Leaflet zoom controls away from the toggle button */
+    .leaflet-bottom.leaflet-right { bottom: 80px; }
+  }
 </style>
 </head>
 <body>
 <div id="map"></div>
+
+<!-- Mobile bottom sheet for legend -->
+<button class="legend-toggle-btn" id="legendToggle" aria-label="Show filters">☰</button>
+<div class="legend-overlay" id="legendOverlay"></div>
+<div class="legend-sheet" id="legendSheet">
+  <div class="sheet-handle"></div>
+  <button class="sheet-close" id="sheetClose" aria-label="Close">✕</button>
+  <div id="sheetContent"></div>
+</div>
+
 <script>
 const locations = [
   // Parks
@@ -544,6 +621,97 @@ legend.onAdd = function() {
   return div;
 };
 legend.addTo(map);
+
+// --- Mobile bottom sheet logic ---
+(function() {
+  const toggleBtn = document.getElementById('legendToggle');
+  const overlay = document.getElementById('legendOverlay');
+  const sheet = document.getElementById('legendSheet');
+  const sheetContent = document.getElementById('sheetContent');
+  const sheetClose = document.getElementById('sheetClose');
+
+  function isMobile() {
+    return window.matchMedia('(max-width: 640px)').matches;
+  }
+
+  function openSheet() {
+    overlay.style.display = 'block';
+    sheet.style.display = 'block';
+    // Force reflow before adding class for transition
+    sheet.offsetHeight;
+    sheet.classList.add('open');
+  }
+
+  function closeSheet() {
+    sheet.classList.remove('open');
+    sheet.addEventListener('transitionend', function handler() {
+      sheet.removeEventListener('transitionend', handler);
+      sheet.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+  }
+
+  function buildSheetContent() {
+    let html = '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
+    html += '<h3 style="margin-bottom:8px;font-size:14px;font-weight:600;">Categories</h3>';
+
+    Object.keys(catColors).forEach(cat => {
+      const symbol = symbols[cat];
+      const dimmed = categoryVisible[cat] ? '' : ' dimmed';
+      html += `<div class="legend-item${dimmed}" data-cat="${cat}">
+        <div class="legend-dot" style="background:${catColors[cat]}">${symbol}</div>
+        ${catNames[cat]}
+      </div>`;
+    });
+
+    html += '<div class="legend-separator"></div>';
+    html += '<h3 style="margin-bottom:6px;font-size:14px;font-weight:600;">Amenities</h3>';
+    html += '<div class="legend-item"><div class="legend-dot" style="background:#666;border:3px solid #FFD700;">✓</div>24-hour access</div>';
+    html += '<div class="legend-separator"></div>';
+    html += '<h3 style="margin-bottom:6px;font-size:14px;font-weight:600;">Filters</h3>';
+    html += `<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor:pointer;"><input type="checkbox" ${yearRoundVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Year-round</div>`;
+    html += `<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor:pointer;"><input type="checkbox" ${seasonalVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Seasonal</div>`;
+
+    sheetContent.innerHTML = html;
+
+    // Wire up category clicks
+    sheetContent.querySelectorAll('[data-cat]').forEach(item => {
+      item.addEventListener('click', function() {
+        const cat = this.dataset.cat;
+        categoryVisible[cat] = !categoryVisible[cat];
+        this.classList.toggle('dimmed');
+        // Also sync the desktop legend if it exists
+        const desktopItem = document.querySelector(`.legend [data-cat="${cat}"]`);
+        if (desktopItem) desktopItem.classList.toggle('dimmed', !categoryVisible[cat]);
+        updateVisibility();
+      });
+    });
+
+    // Wire up filter checkboxes
+    sheetContent.querySelectorAll('[data-toggle]').forEach(item => {
+      const checkbox = item.querySelector('input');
+      item.addEventListener('click', function(e) {
+        if (e.target === checkbox) return;
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      });
+      checkbox.addEventListener('change', function() {
+        const toggle = this.parentElement.dataset.toggle;
+        if (toggle === 'yearround') yearRoundVisible = this.checked;
+        else if (toggle === 'seasonal') seasonalVisible = this.checked;
+        updateVisibility();
+      });
+    });
+  }
+
+  toggleBtn.addEventListener('click', function() {
+    buildSheetContent();
+    openSheet();
+  });
+
+  overlay.addEventListener('click', closeSheet);
+  sheetClose.addEventListener('click', closeSheet);
+})();
 
 </script>
 </body>
