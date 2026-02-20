@@ -53,6 +53,20 @@
   .tag-yearround { background: #d4edda; color: #155724; }
   .tag-seasonal { background: #fff3cd; color: #856404; }
   .tag-24hr { background: #cce5ff; color: #004085; }
+  .tag-fountain { background: #d1ecf1; color: #0c5460; }
+
+  /* Water fountain badge on dual-purpose markers */
+  .wf-badge {
+    display: none;
+    position: absolute; bottom: -4px; right: -6px;
+    font-size: 12px; line-height: 1;
+    background: white; border-radius: 50%;
+    width: 18px; height: 18px;
+    align-items: center; justify-content: center;
+    box-shadow: 0 0 3px rgba(0,0,0,0.4);
+    z-index: 1;
+  }
+  .show-fountains .wf-badge { display: flex; }
 
   /* Mobile toggle button (hidden on desktop) */
   .legend-toggle-btn {
@@ -436,6 +450,56 @@ const locations = [
    desc:"81 Tyler Terrace (Newton Centre). Recreation building with gym and restrooms. Entrances from Centre St and Homer St.", hours:"Year-round: facility hours"}
 ];
 
+// Locations that also have drinking water fountains / bubblers
+const waterFountainIds = new Set([
+  // Charles River / Esplanade (seasonal outdoor fountains, mid-Apr to mid-Oct)
+  1, 2, 3, 7, 8, 9, 12, 13, 14,
+  // Parks with confirmed outdoor drinking fountains
+  15, 17, 18, 22, 49, 51, 62, 65, 90, 96, 97, 98,
+  // Universities (indoor fountains in publicly accessible buildings)
+  24, 27, 28, 29, 110, 111,
+  // Libraries (indoor fountains / bottle refill stations)
+  32, 33, 56, 60, 61, 64, 69, 73, 74, 75, 87, 91, 92, 103, 104, 105, 108, 117, 118,
+  // City/Town Halls & Public Buildings
+  30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119,
+  // Hospitals & Health Centers (indoor fountains)
+  35, 36, 37, 38, 39, 40, 41, 42, 43, 80, 102, 106, 113,
+  // Recreation Centers / YMCAs / Pools
+  16, 63, 67, 68, 77, 78, 81, 82, 86, 88, 95, 101, 107, 114, 121, 123, 124,
+  // Attractions & Museums
+  50, 53, 57, 84, 85,
+  // Retail / Malls
+  52, 122
+]);
+
+// Standalone water fountain locations (no bathrooms)
+const fountainLocations = [
+  {id:'F1', name:"Lotta Fountain (Esplanade)", lat:42.3547, lng:-71.0763,
+   seasonal:true, desc:"Esplanade between Berkeley & Clarendon St. Historic 1939 drinking fountain with dog bowl. Near Esplanade Playspace.",
+   hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:'F2', name:"Esplanade Playground Fountain", lat:42.3565, lng:-71.0718,
+   seasonal:true, desc:"Near Fiedler Footbridge playground, west of Hatch Shell. Green fountain by the playground.",
+   hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:'F3', name:"Lederman Park Fountain", lat:42.3640, lng:-71.0710,
+   seasonal:true, desc:"Near the baseball field at Lederman Park, adjacent to Teddy Ebersol Fields.",
+   hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:'F4', name:"BU DeWolfe Boathouse Fountain", lat:42.3536, lng:-71.1095,
+   seasonal:true, desc:"In front of BU DeWolfe Boathouse on the Cambridge side of the Charles River, near BU Bridge.",
+   hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:'F5', name:"Rose Kennedy Greenway Fountain", lat:42.3567, lng:-71.0515,
+   seasonal:false, desc:"Near the Greenway Carousel and Harbor Islands Pavilion. Drinking fountain with dog bowl.",
+   hours:"Year-round"},
+  {id:'F6', name:"Copley Square Fountain", lat:42.3496, lng:-71.0775,
+   seasonal:true, desc:"Copley Square park, recently renovated. Drinking fountain near playground area.",
+   hours:"Seasonal: spring-fall"},
+  {id:'F7', name:"Eliot Bridge Rest Area Fountain", lat:42.3710, lng:-71.1338,
+   seasonal:true, desc:"DCR Memorial Drive Greenway rest area near Eliot Bridge underpass. Fountain with benches and bike racks.",
+   hours:"Seasonal: mid-Apr to mid-Oct"},
+  {id:'F8', name:"Fresh Pond 'The Squirt' Fountain", lat:42.3870, lng:-71.1480,
+   seasonal:true, desc:"Sculptural drinking fountain by Laura Baring-Gould along the perimeter path around Fresh Pond Reservoir.",
+   hours:"Seasonal: spring-fall"},
+];
+
 // Colorblind-friendly palette (Okabe-Ito based)
 const catColors = {
   university: "#CC79A7",      // mauve/pink - distinct
@@ -474,10 +538,10 @@ Object.keys(catColors).forEach(c => categoryVisible[c] = true);
 
 let seasonalVisible = true;
 let yearRoundVisible = true;
+let fountainVisible = false;
 
-function createIcon(color, is24hr, catKey) {
+function createIcon(color, is24hr, catKey, hasWaterFountain) {
   const size = is24hr ? 36 : 32;
-  const innerSize = is24hr ? 28 : 24;
 
   // Symbol mapping for different categories (for non-color-dependent identification)
   const symbols = {
@@ -498,9 +562,14 @@ function createIcon(color, is24hr, catKey) {
     ? '0 0 8px rgba(255,215,0,0.6), 0 0 0 2px rgba(0,0,0,0.2)'
     : '0 0 6px rgba(0,0,0,0.3)';
 
+  const wfBadge = hasWaterFountain
+    ? '<span class="wf-badge">🚰</span>'
+    : '';
+
   return L.divIcon({
     className: '',
     html: `<div style="
+      position:relative;
       width:${size}px;
       height:${size}px;
       border-radius:50%;
@@ -515,24 +584,48 @@ function createIcon(color, is24hr, catKey) {
       color:white;
       text-shadow: 0 0 2px rgba(0,0,0,0.8);
       flex-shrink:0;
-    ">${symbol}</div>`,
+    ">${symbol}${wfBadge}</div>`,
     iconSize: [size, size],
     iconAnchor: [size/2, size/2],
     popupAnchor: [0, -size/2]
   });
 }
 
+function createFountainIcon() {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:#2196F3;
+      border:2px solid rgba(255,255,255,0.9);
+      box-shadow:0 0 6px rgba(0,0,0,0.3);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      flex-shrink:0;
+    ">🚰</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  });
+}
+
 locations.forEach(loc => {
   const color = catColors[loc.cat];
-  const icon = createIcon(color, loc.is24hr, loc.cat);
+  const hasWf = waterFountainIds.has(loc.id);
+  const icon = createIcon(color, loc.is24hr, loc.cat, hasWf);
   const seasonTag = loc.seasonal
     ? '<span class="popup-tag tag-seasonal">SEASONAL</span>'
     : '<span class="popup-tag tag-yearround">YEAR-ROUND</span>';
   const hrTag = loc.is24hr ? ' <span class="popup-tag tag-24hr">24 HR</span>' : '';
+  const wfTag = hasWf ? ' <span class="popup-tag tag-fountain">WATER FOUNTAIN</span>' : '';
 
   const popup = `
     <div class="popup-title">#${loc.id} ${loc.name}</div>
-    ${seasonTag}${hrTag}<br>
+    ${seasonTag}${hrTag}${wfTag}<br>
     ${loc.desc}<br>
     <strong>Hours:</strong> ${loc.hours}<br>
     <em style="font-size:11px;color:#666;">${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}</em>
@@ -543,6 +636,27 @@ locations.forEach(loc => {
   marker._locData = loc;
   marker.addTo(map);
   markers.push(marker);
+});
+
+// Create fountain-only markers (hidden by default)
+const fountainMarkers = [];
+fountainLocations.forEach(fl => {
+  const icon = createFountainIcon();
+  const seasonTag = fl.seasonal
+    ? '<span class="popup-tag tag-seasonal">SEASONAL</span>'
+    : '<span class="popup-tag tag-yearround">YEAR-ROUND</span>';
+
+  const popup = `
+    <div class="popup-title">🚰 ${fl.name}</div>
+    ${seasonTag} <span class="popup-tag tag-fountain">WATER FOUNTAIN</span><br>
+    ${fl.desc}<br>
+    <strong>Hours:</strong> ${fl.hours}<br>
+    <em style="font-size:11px;color:#666;">${fl.lat.toFixed(4)}, ${fl.lng.toFixed(4)}</em>
+  `;
+
+  const marker = L.marker([fl.lat, fl.lng], {icon}).bindPopup(popup);
+  marker._fountainData = fl;
+  fountainMarkers.push(marker);
 });
 
 function updateVisibility() {
@@ -556,6 +670,25 @@ function updateVisibility() {
       map.removeLayer(m);
     }
   });
+
+  // Toggle fountain-only markers
+  fountainMarkers.forEach(m => {
+    const fl = m._fountainData;
+    const seaOk = fl.seasonal ? seasonalVisible : yearRoundVisible;
+    if (fountainVisible && seaOk) {
+      m.addTo(map);
+    } else {
+      map.removeLayer(m);
+    }
+  });
+
+  // Toggle fountain badges on bathroom markers
+  const mapEl = document.getElementById('map');
+  if (fountainVisible) {
+    mapEl.classList.add('show-fountains');
+  } else {
+    mapEl.classList.remove('show-fountains');
+  }
 }
 
 // Legend
@@ -575,9 +708,16 @@ function downloadCSV() {
   let csv = 'Title,Description,Latitude,Longitude\n';
 
   locations.forEach(loc => {
-    const title = `${loc.name} (${loc.hours})`;
+    const wf = waterFountainIds.has(loc.id) ? ' [Water Fountain]' : '';
+    const title = `${loc.name}${wf} (${loc.hours})`;
     const desc = loc.desc.replace(/"/g, '""'); // Escape quotes in CSV
     csv += `"${title}","${desc}",${loc.lat},${loc.lng}\n`;
+  });
+
+  fountainLocations.forEach(fl => {
+    const title = `🚰 ${fl.name} (${fl.hours})`;
+    const desc = fl.desc.replace(/"/g, '""');
+    csv += `"${title}","${desc}",${fl.lat},${fl.lng}\n`;
   });
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -611,8 +751,9 @@ legend.onAdd = function() {
 
   div.innerHTML += '<div class="legend-separator"></div>';
   div.innerHTML += '<h3 style="margin-bottom: 6px; margin-top: 0;">Filters</h3>';
-  div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Year-round</div>';
-  div.innerHTML += '<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor: pointer;"><input type="checkbox" checked style="margin-right: 6px; cursor: pointer;"> Seasonal</div>';
+  div.innerHTML += '<div class="legend-item dimmed" data-toggle="fountains"><div class="legend-dot" style="background:#2196F3">🚰</div>Water Fountains</div>';
+  div.innerHTML += '<div class="legend-item" data-toggle="yearround"><div class="legend-dot" style="background:#28a745">❄️</div>Year-round</div>';
+  div.innerHTML += '<div class="legend-item" data-toggle="seasonal"><div class="legend-dot" style="background:#fd7e14">☀️</div>Seasonal</div>';
 
   div.innerHTML += '<div class="legend-separator"></div>';
   div.innerHTML += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
@@ -629,19 +770,13 @@ legend.onAdd = function() {
 
   // Add click handlers to toggle filters
   div.querySelectorAll('[data-toggle]').forEach(item => {
-    const checkbox = item.querySelector('input');
-    item.addEventListener('click', function(e) {
-      if (e.target === checkbox) return; // Let checkbox handle its own click
-      checkbox.checked = !checkbox.checked;
-      checkbox.dispatchEvent(new Event('change'));
-    });
-    checkbox.addEventListener('change', function() {
-      const toggle = this.parentElement.dataset.toggle;
-      if (toggle === 'yearround') {
-        yearRoundVisible = this.checked;
-      } else if (toggle === 'seasonal') {
-        seasonalVisible = this.checked;
-      }
+    item.addEventListener('click', function() {
+      const toggle = this.dataset.toggle;
+      this.classList.toggle('dimmed');
+      const active = !this.classList.contains('dimmed');
+      if (toggle === 'yearround') yearRoundVisible = active;
+      else if (toggle === 'seasonal') seasonalVisible = active;
+      else if (toggle === 'fountains') fountainVisible = active;
       updateVisibility();
     });
   });
@@ -696,8 +831,9 @@ legend.addTo(map);
     html += '<div class="legend-item"><div class="legend-dot" style="background:#666;border:3px solid #FFD700;">✓</div>24-hour access</div>';
     html += '<div class="legend-separator"></div>';
     html += '<h3 style="margin-bottom:6px;font-size:14px;font-weight:600;">Filters</h3>';
-    html += `<div class="legend-item legend-toggle" data-toggle="yearround" style="cursor:pointer;"><input type="checkbox" ${yearRoundVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Year-round</div>`;
-    html += `<div class="legend-item legend-toggle" data-toggle="seasonal" style="cursor:pointer;"><input type="checkbox" ${seasonalVisible ? 'checked' : ''} style="margin-right:6px;cursor:pointer;width:20px;height:20px;"> Seasonal</div>`;
+    html += `<div class="legend-item${fountainVisible ? '' : ' dimmed'}" data-toggle="fountains"><div class="legend-dot" style="background:#2196F3">🚰</div>Water Fountains</div>`;
+    html += `<div class="legend-item${yearRoundVisible ? '' : ' dimmed'}" data-toggle="yearround"><div class="legend-dot" style="background:#28a745">❄️</div>Year-round</div>`;
+    html += `<div class="legend-item${seasonalVisible ? '' : ' dimmed'}" data-toggle="seasonal"><div class="legend-dot" style="background:#fd7e14">☀️</div>Seasonal</div>`;
     html += '<div class="legend-separator"></div>';
     html += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
 
@@ -716,18 +852,18 @@ legend.addTo(map);
       });
     });
 
-    // Wire up filter checkboxes
+    // Wire up filter toggles
     sheetContent.querySelectorAll('[data-toggle]').forEach(item => {
-      const checkbox = item.querySelector('input');
-      item.addEventListener('click', function(e) {
-        if (e.target === checkbox) return;
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
-      });
-      checkbox.addEventListener('change', function() {
-        const toggle = this.parentElement.dataset.toggle;
-        if (toggle === 'yearround') yearRoundVisible = this.checked;
-        else if (toggle === 'seasonal') seasonalVisible = this.checked;
+      item.addEventListener('click', function() {
+        const toggle = this.dataset.toggle;
+        this.classList.toggle('dimmed');
+        const active = !this.classList.contains('dimmed');
+        if (toggle === 'yearround') yearRoundVisible = active;
+        else if (toggle === 'seasonal') seasonalVisible = active;
+        else if (toggle === 'fountains') fountainVisible = active;
+        // Sync desktop legend
+        const desktopItem = document.querySelector(`.legend [data-toggle="${toggle}"]`);
+        if (desktopItem) desktopItem.classList.toggle('dimmed', !active);
         updateVisibility();
       });
     });
