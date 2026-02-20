@@ -524,6 +524,35 @@ WATERTOWN / BRIGHTON AREA (West of Charles River):
   #102 BILH Care Center/Mt Auburn Hospital (Watertown)
   #103 Brighton Branch Library
 
+SOMERVILLE / DAVIS SQUARE AREA:
+  #104-105 Somerville Public Libraries (Central & East Branch)
+  #106 CHA Somerville Campus (24hr lobby)
+  #107 Somerville YMCA
+  #133 Starbucks - Davis Square
+
+MEDFORD / TUFTS AREA:
+  #108 Medford Public Library, #109 Medford City Hall
+  #110-111 Tufts University (Mayer Campus Center & Tisch Library)
+  #112 Medford/Tufts Green Line Station
+  #113 Lawrence Memorial Hospital, #114 Recreation Center
+
+CHESTNUT HILL / NEWTON AREA:
+  #117 Newton Free Library, #119 Newton City Hall
+  #118 Brookline Public Library - Putterham
+  #122 The Shops at Chestnut Hill
+  #123 DCR Reilly Memorial Pool & Rink (Cleveland Circle)
+  #124 Newton Centre Playground ("The Hut")
+
+HOTEL LOBBIES (24hr access, walk in confidently):
+  #55 Charles Hotel, #59 Boston Harbor Hotel, #125 Marriott Long Wharf,
+  #126 Sheraton Boston, #127 Hyatt Regency Cambridge, #128 Park Plaza,
+  #129 Omni Parker House, #130 W Boston
+
+STARBUCKS (purchase may be expected):
+  #131 Harvard Sq, #132 Kendall Sq, #133 Davis Sq, #134 Back Bay,
+  #135 Copley Sq, #136 Boston Common, #137 Fenway, #138 Central Sq,
+  #139 Cambridge St/MGH, #140 Brookline Village
+
 
 ===============================================================================
 WATERTOWN / BRIGHTON (West of Charles River / Route 128 area)
@@ -602,14 +631,264 @@ BROOKLINE PUBLIC RESTROOMS
 
 
 ===============================================================================
+SOMERVILLE
+===============================================================================
+
+104. Somerville Public Library - Central - 79 Highland Ave (Central Somerville)
+     GPS: 42.3852, -71.0942
+     [YEAR-ROUND] Main library branch with public restrooms on multiple floors.
+     Hours: M-Th 9am-9pm, F-Sa 9am-5pm, Su 1-5pm.
+
+105. Somerville Public Library - East Branch - 115 Broadway (East Somerville)
+     GPS: 42.3879, -71.0839
+     [YEAR-ROUND] Library branch with public restrooms. Call (617) 623-5000
+     for hours.
+
+106. CHA Somerville Campus - 33 Tower St (Davis Square area)
+     GPS: 42.3896, -71.1094
+     [YEAR-ROUND] Medical center with 24-hour lobby access. Restrooms available.
+
+107. Somerville YMCA - 101 Highland Ave (Somerville)
+     GPS: 42.3871, -71.0992
+     [YEAR-ROUND] Full-service YMCA with pool, locker rooms, and restrooms.
+     Hours: M-F 5:30am-9pm, Sa-Su 7am-8pm.
+
+
+===============================================================================
+MEDFORD / TUFTS
+===============================================================================
+
+108. Medford Public Library - 111 High St (Medford)
+     GPS: 42.4198, -71.1142
+     [YEAR-ROUND] Main library with public restrooms. No ID required.
+     Hours: M-Th 9am-9pm, F 9am-6pm, Sa 9am-5pm.
+
+109. Medford City Hall - 85 George P Hassett Dr (Medford)
+     GPS: 42.4186, -71.1057
+     [YEAR-ROUND] Public restrooms during business hours.
+     Hours: M,Tu,Th 8:30am-4:30pm, W 8:30am-7:30pm, F 8:30am-12:30pm.
+
+110. Tufts University - Mayer Campus Center - 44 Professors Row (Medford/Somerville)
+     GPS: 42.4060, -71.1201
+     [YEAR-ROUND] Open to public. Restrooms inside, no student ID required.
+     Hours: M-Th 8am-12am, F 8am-1am, Sa 10am-1am, Su 10am-12am.
+
+111. Tufts University - Tisch Library - 35 Professors Row (Medford/Somerville)
+     GPS: 42.4064, -71.1209
+     [YEAR-ROUND] Open to public visitors. Restrooms available.
+     Hours: M-Th 8am-1am, F 8am-9pm, Su 10am-1am.
+
+112. Medford/Tufts Green Line Station - 460 Boston Ave (Medford)
+     GPS: 42.4104, -71.1198
+     [YEAR-ROUND] Green Line Extension station with two accessible restrooms.
+     May sometimes be locked. Hours: during MBTA service (~5am-1am).
+
+113. Lawrence Memorial Hospital - 170 Governors Ave (Medford)
+     GPS: 42.4263, -71.1111
+     [YEAR-ROUND] Part of Tufts Medicine. Lobby restrooms during operating hours.
+
+114. Medford Recreation Center - 30 Forest St (Medford)
+     GPS: 42.4193, -71.1091
+     [YEAR-ROUND] City recreation facility with public restrooms. Facility hours.
+
+115. Wright's Pond Beach - 140 Elm St (Medford)
+     GPS: 42.4384, -71.0989
+     [SEASONAL] Bathhouse with restrooms and concessions. Summer only
+     (mid-June to Labor Day).
+
+116. Medford Senior Center - 101 Riverside Ave (Medford)
+     GPS: 42.4168, -71.1055
+     [YEAR-ROUND] Barrier-free facility, publicly accessible.
+     Hours: M-F 9am-4pm.
+
+
+===============================================================================
+CHESTNUT HILL / NEWTON
+===============================================================================
+
+117. Newton Free Library - 330 Homer St (Newton Centre)
+     GPS: 42.3365, -71.2083
+     [YEAR-ROUND] Main library with public restrooms on multiple floors. No ID
+     required. Hours: M-Th 9am-9pm, F 9am-6pm, Sa 9am-5pm, Su 1-5pm.
+
+118. Brookline Public Library - Putterham - 959 W Roxbury Pkwy (Chestnut Hill)
+     GPS: 42.3020, -71.1499
+     [YEAR-ROUND] Branch library with public restrooms.
+     Hours: M 1-9pm, Tu 10am-6pm, W 1-9pm, Th 10am-6pm, F-Sa 10am-5pm.
+
+119. Newton City Hall - 1000 Commonwealth Ave (Newton Centre)
+     GPS: 42.3382, -71.2082
+     [YEAR-ROUND] Public restrooms during business hours. Wheelchair accessible.
+     Hours: M-F 8:30am-5pm.
+
+120. Skyline Park - 815 Newton St (Chestnut Hill)
+     GPS: 42.3082, -71.1680
+     [SEASONAL] Park with playground, walking paths, and restroom facility.
+     Spring-fall, daytime hours.
+
+121. Soule Recreation Center - 652 Hammond St (Chestnut Hill)
+     GPS: 42.3254, -71.1651
+     [SEASONAL] Environmental center with restrooms. Splash pad in summer.
+     Hours: mid-Apr to mid-Nov, 7am-8pm.
+
+122. The Shops at Chestnut Hill - 199 Boylston St/Rte 9 (Chestnut Hill)
+     GPS: 42.3204, -71.1758
+     [YEAR-ROUND] Public restrooms on Level 1. Family restrooms available.
+     Hours: M-Sa 10am-9pm, Su 11am-6pm.
+
+123. DCR Reilly Memorial Pool & Rink - 355 Chestnut Hill Ave (Cleveland Circle)
+     GPS: 42.3356, -71.1506
+     [SEASONAL] Free outdoor pool in summer, ice rink in winter. Restrooms,
+     showers, lockers. Pool summer ~11am-7pm, rink winter hours.
+
+124. Newton Centre Playground ("The Hut") - 81 Tyler Terrace (Newton Centre)
+     GPS: 42.3322, -71.1977
+     [YEAR-ROUND] Recreation building with gym and restrooms. Entrances from
+     Centre St and Homer St. Facility hours.
+
+
+===============================================================================
+HOTEL LOBBIES (walk in confidently - 24hr lobby access)
+===============================================================================
+
+125. Boston Marriott Long Wharf - 296 State St (Waterfront)
+     GPS: 42.3602, -71.0510
+     [YEAR-ROUND] Upscale hotel — walk in and use lobby restrooms. 24hr lobby.
+
+126. Sheraton Boston Hotel - 39 Dalton St (Back Bay/Prudential)
+     GPS: 42.3464, -71.0836
+     [YEAR-ROUND] Upscale hotel — walk in and use lobby restrooms. 24hr lobby.
+
+127. Hyatt Regency Boston/Cambridge - 575 Memorial Dr (Cambridge)
+     GPS: 42.3540, -71.1053
+     [YEAR-ROUND] Upscale hotel on Charles River — walk in and use lobby
+     restrooms. 24hr lobby.
+
+128. Boston Park Plaza - 50 Park Plaza (Back Bay)
+     GPS: 42.3521, -71.0633
+     [YEAR-ROUND] Upscale hotel — walk in and use lobby restrooms. 24hr lobby.
+
+129. Omni Parker House - 60 School St (Downtown)
+     GPS: 42.3578, -71.0602
+     [YEAR-ROUND] Historic hotel — walk in and use lobby restrooms. 24hr lobby.
+
+130. W Boston - 100 Stuart St (Theater District)
+     GPS: 42.3509, -71.0655
+     [YEAR-ROUND] Upscale hotel — walk in and use lobby restrooms. 24hr lobby.
+
+
+===============================================================================
+STARBUCKS (near running routes - customer restrooms, purchase may be expected)
+===============================================================================
+
+131. Starbucks - Harvard Square - 468 Broadway, Cambridge
+     GPS: 42.3738, -71.1131
+     [YEAR-ROUND] Broadway Marketplace. Near Weeks Bridge/Charles River.
+     Hours: Daily 5am-9pm.
+
+132. Starbucks - Kendall Square - 120 Broadway, Cambridge (in Marriott Cambridge)
+     GPS: 42.3639, -71.0881
+     [YEAR-ROUND] Near Charles River path.
+     Hours: M-F 4:30am-9pm, Sa-Su 5am-9pm.
+
+133. Starbucks - Davis Square - 260 Elm St, Somerville
+     GPS: 42.3956, -71.1226
+     [YEAR-ROUND] Near Community Path/Minuteman Bikeway.
+     Hours: M-Th 5am-9:30pm, F-Sa 5am-10pm, Su 5:30am-9:30pm.
+
+134. Starbucks - Back Bay (Boylston) - 755 Boylston St, Boston
+     GPS: 42.3494, -71.0810
+     [YEAR-ROUND] Near Charles River Esplanade.
+     Hours: M-F 5am-7pm, Sa 5:30am-7pm, Su 6am-7pm.
+
+135. Starbucks - Copley Square - 443 Boylston St, Boston
+     GPS: 42.3516, -71.0730
+     [YEAR-ROUND] Near BPL and Arlington St Esplanade access.
+     Hours: M-F 5am-7:30pm, Sa 5:30am-7:30pm, Su 6am-7:30pm.
+
+136. Starbucks - Boston Common - 65-66 Beacon St, Boston
+     GPS: 42.3564, -71.0693
+     [YEAR-ROUND] Right at Boston Common.
+     Hours: Daily 5am-9pm.
+
+137. Starbucks - Fenway - 142-148 Brookline Ave, Boston
+     GPS: 42.3442, -71.1014
+     [YEAR-ROUND] Near Emerald Necklace/Muddy River path.
+     Hours: M-F 4:30am-8pm, Sa-Su 5am-8pm.
+
+138. Starbucks - Central Square - 655 Massachusetts Ave, Cambridge
+     GPS: 42.3656, -71.1038
+     [YEAR-ROUND] Near River St bridge to Charles River.
+     Hours: M-F 5am-9pm, Sa-Su 5:30am-9pm.
+
+139. Starbucks - Cambridge St / MGH - 222 Cambridge St, Boston
+     GPS: 42.3610, -71.0665
+     [YEAR-ROUND] Near Science Museum end of Esplanade.
+     Hours: Daily 5am-9pm.
+
+140. Starbucks - Brookline Village - 15 Harvard St, Brookline
+     GPS: 42.3337, -71.1187
+     [YEAR-ROUND] Near Emerald Necklace path to Jamaica Pond.
+     Hours: Daily 5am-7:30pm.
+
+
+===============================================================================
+ADDITIONAL BOSTON PUBLIC LIBRARY BRANCHES
+===============================================================================
+
+141. BPL - Roslindale Branch - 4246 Washington St (Roslindale)
+     GPS: 42.2856, -71.1286
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M-W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm.
+
+142. BPL - Connolly Branch - 433 Centre St (Jamaica Plain)
+     GPS: 42.3207, -71.1111
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 12-8pm, Tu-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm.
+
+143. BPL - Adams Street Branch - 690 Adams St (Dorchester)
+     GPS: 42.2863, -71.0545
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 12-8pm, Tu 10am-6pm, W 12-8pm, Th 10am-6pm, F-Sa 9am-5pm.
+
+144. BPL - Fields Corner Branch - 1520 Dorchester Ave (Dorchester)
+     GPS: 42.2984, -71.0603
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     NOTE: Closed for construction until summer 2026.
+     Hours: M 10am-6pm, Tu 12-8pm, W-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm.
+
+145. BPL - Lower Mills Branch - 27 Richmond St (Dorchester)
+     GPS: 42.2735, -71.0684
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 12-8pm, Tu-W 10am-6pm, Th 12-8pm, F 9am-5pm, Sa 9am-2pm.
+
+146. BPL - Shaw-Roxbury Branch - 149 Dudley St (Roxbury/Nubian Sq)
+     GPS: 42.3281, -71.0836
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 12-8pm, Tu-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm.
+
+147. BPL - Parker Hill Branch - 1497 Tremont St (Mission Hill)
+     GPS: 42.3324, -71.0991
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 10am-6pm, Tu 12-8pm, W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm.
+
+148. BPL - Mattapan Branch - 1350 Blue Hill Ave (Mattapan)
+     GPS: 42.2775, -71.0933
+     [YEAR-ROUND] Boston Public Library branch with public restrooms.
+     Hours: M 10am-6pm, Tu 12-8pm, W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm.
+
+
+===============================================================================
 TIPS FOR RUNNERS
 ===============================================================================
 
-- In WINTER, your best bets are: hospitals (#35-43), libraries (#32-33, #91-92),
-  university buildings (#24, #27-29), City Hall (#30), T stations (#44-45),
-  fire stations (#46), Portland Loos (#23, #26, #47), Brookline Public Safety
-  Building (#94 - 24 hours), Fresh Pond Ranger Station (#15), and Brookline
-  High School (#95).
+- In WINTER, your best bets are: hospitals (#35-43, #106, #113), libraries
+  (#32-33, #56, #91-92, #104-105, #108, #117-118, #141-148), university
+  buildings (#24, #27-29, #110-111), City Halls (#30, #93, #109, #119),
+  T stations (#44-45, #112), fire stations (#46), Portland Loos (#23, #26,
+  #47), Brookline Public Safety Building (#94 - 24 hours), Fresh Pond
+  Ranger Station (#15), hotel lobbies (#55, #59, #125-130), Starbucks
+  (#131-140), and recreation centers (#95, #101, #107, #114, #124).
 
 - In SUMMER, nearly everything is open. The Charles River path has porta-
   potties roughly every mile on both sides.
@@ -617,8 +896,14 @@ TIPS FOR RUNNERS
 - The Portland Loos at Harvard Sq and Cambridge Common are 24/7/365 and
   your most reliable emergency option.
 
-- Hospital emergency room lobbies (#35 Cambridge Hospital) are open 24
-  hours and nobody will question you using the restroom.
+- Hospital emergency room lobbies (#35 Cambridge Hospital, #106 CHA
+  Somerville) are open 24 hours and nobody will question you using
+  the restroom.
+
+- Hotel lobbies (#125-130) are open 24 hours — walk in confidently.
+
+- Starbucks (#131-140) are reliably open early morning through evening,
+  great for pre-dawn or evening runs. A small purchase may be expected.
 
 - For the interactive map with real-time info: bathroomaccess.com
 
