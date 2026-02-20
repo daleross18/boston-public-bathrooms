@@ -879,16 +879,63 @@ ADDITIONAL BOSTON PUBLIC LIBRARY BRANCHES
 
 
 ===============================================================================
+NORTHEASTERN CAMPUS / SOUTHWEST CORRIDOR (Pierre Lallement Bike Path)
+===============================================================================
+
+149. Northeastern University - Curry Student Center - 346 Huntington Ave, Boston
+     GPS: 42.3390, -71.0876
+     [YEAR-ROUND] Open to public. Restrooms on multiple floors. Starbucks inside.
+     Note: other campus buildings require Husky Card for restroom access.
+     Hours: M-F 7am-11pm, Sa-Su reduced hours.
+
+150. Museum of Fine Arts (MFA) - 465 Huntington Ave, Boston
+     GPS: 42.3394, -71.0941
+     [YEAR-ROUND] Multiple restrooms throughout museum. Lobby/shop area accessible
+     without ticket. Free admission Wed after 4pm. Full access requires admission.
+     Hours: M-Tu 10am-5pm, W-F 10am-10pm, Sa-Su 10am-5pm.
+
+151. Ruggles Station (Orange Line / Commuter Rail) - 1150 Tremont St, Roxbury
+     GPS: 42.3364, -71.0890
+     [YEAR-ROUND] Restroom inside fare gates — ask MBTA staff for access.
+     ADA-compliant. On Southwest Corridor bike path at Northeastern campus.
+     Hours: during MBTA service (~5am-1am).
+
+152. Reggie Lewis Track & Athletic Center - 1350 Tremont St, Roxbury Crossing
+     GPS: 42.3321, -71.0928
+     [YEAR-ROUND] Public athletic facility (Roxbury Community College). Restrooms
+     and locker rooms during open hours and events. Adjacent to SW Corridor path
+     and Roxbury Crossing Orange Line station.
+
+153. BCYF Tobin Community Center - 1481 Tremont St, Boston (Mission Hill)
+     GPS: 42.3323, -71.0983
+     [YEAR-ROUND] Boston Centers for Youth & Families. Public restrooms, gym.
+     Near Southwest Corridor path. Hours: M-F 8am-9pm, Sa 9am-5pm.
+
+154. BPL - Egleston Square Branch - 2044 Columbus Ave, Boston (Roxbury)
+     GPS: 42.3142, -71.0956
+     [YEAR-ROUND] Boston Public Library branch with public restrooms. Wheelchair
+     accessible. Near Stony Brook station on SW Corridor path.
+     Hours: M-Tu 10am-6pm, W 12-8pm, Th 10am-6pm, F 9am-5pm, Sa 9am-2pm.
+
+155. Forest Hills Station (Orange Line) - 3699 Washington St, Jamaica Plain
+     GPS: 42.3007, -71.1139
+     [YEAR-ROUND] Major transit hub at south end of Southwest Corridor bike path.
+     Restrooms inside fare gates. Near Arnold Arboretum (#18-19).
+     Hours: during MBTA service (~5am-1am).
+
+
+===============================================================================
 TIPS FOR RUNNERS
 ===============================================================================
 
 - In WINTER, your best bets are: hospitals (#35-43, #106, #113), libraries
-  (#32-33, #56, #91-92, #104-105, #108, #117-118, #141-148), university
-  buildings (#24, #27-29, #110-111), City Halls (#30, #93, #109, #119),
-  T stations (#44-45, #112), fire stations (#46), Portland Loos (#23, #26,
-  #47), Brookline Public Safety Building (#94 - 24 hours), Fresh Pond
-  Ranger Station (#15), hotel lobbies (#55, #59, #125-130), Starbucks
-  (#131-140), and recreation centers (#95, #101, #107, #114, #124).
+  (#32-33, #56, #91-92, #104-105, #108, #117-118, #141-148, #154),
+  university buildings (#24, #27-29, #110-111, #149), City Halls (#30,
+  #93, #109, #119), T stations (#44-45, #112, #151, #155), fire stations
+  (#46), Portland Loos (#23, #26, #47), Brookline Public Safety Building
+  (#94 - 24 hours), Fresh Pond Ranger Station (#15), hotel lobbies (#55,
+  #59, #125-130), Starbucks (#131-140), recreation/community centers
+  (#95, #101, #107, #114, #124, #152, #153), and the MFA (#150).
 
 - In SUMMER, nearly everything is open. The Charles River path has porta-
   potties roughly every mile on both sides.
