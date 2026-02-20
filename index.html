@@ -125,6 +125,45 @@
     padding: 14px 16px; font-size: 15px;
   }
 
+  /* Locate me button */
+  .locate-btn {
+    position: fixed; bottom: 20px; left: 16px; z-index: 1000;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: white; color: #333; border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s;
+  }
+  .locate-btn:hover { background: #f0f0f0; }
+  .locate-btn:active { background: #e0e0e0; }
+  .locate-btn.locating { animation: pulse-btn 1s ease infinite; }
+  @keyframes pulse-btn {
+    0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 2px 8px rgba(66,133,244,0.6); }
+  }
+
+  /* User location blue dot */
+  .user-location-dot {
+    width: 16px; height: 16px;
+    background: #4285F4;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(66,133,244,0.5);
+  }
+  .user-location-ring {
+    width: 40px; height: 40px;
+    border: 2px solid rgba(66,133,244,0.3);
+    background: rgba(66,133,244,0.1);
+    border-radius: 50%;
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
   @media (max-width: 640px) {
     /* Hide the Leaflet legend control on mobile */
     .legend { display: none !important; }
@@ -142,6 +181,8 @@
 </head>
 <body>
 <div id="map"></div>
+
+<button class="locate-btn" id="locateBtn" aria-label="Show my location" title="Show my location">&#x1F4CD;</button>
 
 <!-- Mobile bottom sheet for legend -->
 <button class="legend-toggle-btn" id="legendToggle" aria-label="Show filters">☰</button>
@@ -876,6 +917,71 @@ legend.addTo(map);
 
   overlay.addEventListener('click', closeSheet);
   sheetClose.addEventListener('click', closeSheet);
+})();
+
+// --- Locate me ---
+(function() {
+  const btn = document.getElementById('locateBtn');
+  let userMarker = null;
+  let userRing = null;
+
+  btn.addEventListener('click', function() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    btn.classList.add('locating');
+
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        btn.classList.remove('locating');
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const accuracy = pos.coords.accuracy;
+
+        // Remove old markers if re-locating
+        if (userMarker) map.removeLayer(userMarker);
+        if (userRing) map.removeLayer(userRing);
+
+        // Accuracy circle
+        userRing = L.circle([lat, lng], {
+          radius: accuracy,
+          color: '#4285F4',
+          fillColor: '#4285F4',
+          fillOpacity: 0.1,
+          weight: 1,
+          interactive: false
+        }).addTo(map);
+
+        // Blue dot
+        userMarker = L.marker([lat, lng], {
+          icon: L.divIcon({
+            className: '',
+            html: '<div style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">' +
+                  '<div class="user-location-ring" style="position:absolute;"></div>' +
+                  '<div class="user-location-dot"></div>' +
+                  '</div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+          }),
+          zIndexOffset: 1000,
+          interactive: false
+        }).addTo(map);
+
+        map.setView([lat, lng], Math.max(map.getZoom(), 15));
+      },
+      function(err) {
+        btn.classList.remove('locating');
+        if (err.code === 1) {
+          alert('Location access was denied. Please enable location permissions for this site.');
+        } else {
+          alert('Could not determine your location. Please try again.');
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+    );
+  });
 })();
 
 </script>
