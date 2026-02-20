@@ -54,6 +54,9 @@
   .tag-seasonal { background: #fff3cd; color: #856404; }
   .tag-24hr { background: #cce5ff; color: #004085; }
   .tag-fountain { background: #d1ecf1; color: #0c5460; }
+  .tag-open { background: #d4edda; color: #155724; }
+  .tag-closed { background: #f8d7da; color: #721c24; }
+  .tag-unknown { background: #e2e3e5; color: #383d41; }
 
   /* Water fountain badge on dual-purpose markers */
   .wf-badge {
@@ -325,8 +328,8 @@ const locations = [
    desc:"1 Museum of Science Dr. Lobby restrooms. On Charles River Dam.", hours:"Year-round: museum hours"},
   {id:54, name:"Whole Foods (River St)", lat:42.3610, lng:-71.1140, cat:"other", seasonal:false,
    desc:"Customer restrooms, generally accessible. Near Central Sq.", hours:"Year-round: store hours"},
-  {id:55, name:"Charles Hotel", lat:42.3723, lng:-71.1222, cat:"other", seasonal:false,
-   desc:"Harvard Sq. Walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:55, name:"Charles Hotel", lat:42.3723, lng:-71.1222, cat:"hotel", seasonal:false,
+   desc:"1 Bennett St, Harvard Sq. Walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
 
   // Boston Public Restrooms (from boston.gov)
   {id:56, name:"Boston Public Library - Central", lat:42.3494, lng:-71.0784, cat:"public_bldg", seasonal:false,
@@ -335,8 +338,8 @@ const locations = [
    desc:"4 S. Market St (Downtown). Historic marketplace with public restrooms.", hours:"Year-round: marketplace hours"},
   {id:58, name:"Boston City Hall", lat:42.3588, lng:-71.0576, cat:"public_bldg", seasonal:false,
    desc:"1 City Hall Square (Downtown). Government building with public restrooms.", hours:"Year-round: weekday business hours"},
-  {id:59, name:"Boston Harbor Hotel", lat:42.3562, lng:-71.0504, cat:"other", seasonal:false,
-   desc:"70 Rowes Wharf (Waterfront). Upscale hotel - walk in lobby.", hours:"Year-round: 24hr lobby"},
+  {id:59, name:"Boston Harbor Hotel", lat:42.3562, lng:-71.0504, cat:"hotel", seasonal:false,
+   desc:"70 Rowes Wharf (Waterfront). Upscale hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
   {id:60, name:"Boston Public Library - Charlestown", lat:42.3783, lng:-71.0594, cat:"public_bldg", seasonal:false,
    desc:"179 Main St (Charlestown). Branch library near Bunker Hill.", hours:"Library hours"},
   {id:61, name:"Boston Public Library - East Boston", lat:42.3840, lng:-71.0298, cat:"public_bldg", seasonal:false,
@@ -488,7 +491,61 @@ const locations = [
   {id:123, name:"DCR Reilly Memorial Pool & Rink", lat:42.3356, lng:-71.1506, cat:"recreation_centers", seasonal:true,
    desc:"355 Chestnut Hill Ave (Cleveland Circle). Free outdoor pool in summer, ice rink in winter. Restrooms, showers, lockers.", hours:"Seasonal: pool summer ~11am-7pm, rink winter hours"},
   {id:124, name:"Newton Centre Playground (The Hut)", lat:42.3322, lng:-71.1977, cat:"recreation_centers", seasonal:false,
-   desc:"81 Tyler Terrace (Newton Centre). Recreation building with gym and restrooms. Entrances from Centre St and Homer St.", hours:"Year-round: facility hours"}
+   desc:"81 Tyler Terrace (Newton Centre). Recreation building with gym and restrooms. Entrances from Centre St and Homer St.", hours:"Year-round: facility hours"},
+
+  // Hotel Lobbies
+  {id:125, name:"Boston Marriott Long Wharf", lat:42.3602, lng:-71.0510, cat:"hotel", seasonal:false,
+   desc:"296 State St (Waterfront). Upscale hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:126, name:"Sheraton Boston Hotel", lat:42.3464, lng:-71.0836, cat:"hotel", seasonal:false,
+   desc:"39 Dalton St (Back Bay/Prudential). Upscale hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:127, name:"Hyatt Regency Boston/Cambridge", lat:42.3540, lng:-71.1053, cat:"hotel", seasonal:false,
+   desc:"575 Memorial Dr (Cambridge). Upscale hotel on Charles River — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:128, name:"Boston Park Plaza", lat:42.3521, lng:-71.0633, cat:"hotel", seasonal:false,
+   desc:"50 Park Plaza (Back Bay). Upscale hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:129, name:"Omni Parker House", lat:42.3578, lng:-71.0602, cat:"hotel", seasonal:false,
+   desc:"60 School St (Downtown). Historic hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+  {id:130, name:"W Boston", lat:42.3509, lng:-71.0655, cat:"hotel", seasonal:false,
+   desc:"100 Stuart St (Theater District). Upscale hotel — walk in and use lobby restrooms.", hours:"Year-round: 24hr lobby"},
+
+  // Coffee Shops (Starbucks near running routes — addresses verified Feb 2026)
+  {id:131, name:"Starbucks - Harvard Square", lat:42.3738, lng:-71.1131, cat:"coffee", seasonal:false,
+   desc:"468 Broadway, Cambridge (Broadway Marketplace). Near Weeks Bridge/Charles River. Customer restroom — purchase may be expected.", hours:"Daily 5am-9pm"},
+  {id:132, name:"Starbucks - Kendall Square", lat:42.3639, lng:-71.0881, cat:"coffee", seasonal:false,
+   desc:"120 Broadway, Cambridge (in Marriott Cambridge). Near Charles River path. Customer restroom — purchase may be expected.", hours:"M-F 4:30am-9pm, Sa-Su 5am-9pm"},
+  {id:133, name:"Starbucks - Davis Square", lat:42.3956, lng:-71.1226, cat:"coffee", seasonal:false,
+   desc:"260 Elm St, Somerville. Near Community Path/Minuteman Bikeway. Customer restroom — purchase may be expected.", hours:"M-Th 5am-9:30pm, F-Sa 5am-10pm, Su 5:30am-9:30pm"},
+  {id:134, name:"Starbucks - Back Bay (Boylston)", lat:42.3494, lng:-71.0810, cat:"coffee", seasonal:false,
+   desc:"755 Boylston St, Boston. Near Charles River Esplanade. Customer restroom — purchase may be expected.", hours:"M-F 5am-7pm, Sa 5:30am-7pm, Su 6am-7pm"},
+  {id:135, name:"Starbucks - Copley Square", lat:42.3516, lng:-71.0730, cat:"coffee", seasonal:false,
+   desc:"443 Boylston St, Boston. Near BPL and Arlington St Esplanade access. Customer restroom — purchase may be expected.", hours:"M-F 5am-7:30pm, Sa 5:30am-7:30pm, Su 6am-7:30pm"},
+  {id:136, name:"Starbucks - Boston Common", lat:42.3564, lng:-71.0693, cat:"coffee", seasonal:false,
+   desc:"65-66 Beacon St, Boston. Right at Boston Common. Customer restroom — purchase may be expected.", hours:"Daily 5am-9pm"},
+  {id:137, name:"Starbucks - Fenway", lat:42.3442, lng:-71.1014, cat:"coffee", seasonal:false,
+   desc:"142-148 Brookline Ave, Boston. Near Emerald Necklace/Muddy River path. Customer restroom — purchase may be expected.", hours:"M-F 4:30am-8pm, Sa-Su 5am-8pm"},
+  {id:138, name:"Starbucks - Central Square", lat:42.3656, lng:-71.1038, cat:"coffee", seasonal:false,
+   desc:"655 Massachusetts Ave, Cambridge. Near River St bridge to Charles River. Customer restroom — purchase may be expected.", hours:"M-F 5am-9pm, Sa-Su 5:30am-9pm"},
+  {id:139, name:"Starbucks - Cambridge St / MGH", lat:42.3610, lng:-71.0665, cat:"coffee", seasonal:false,
+   desc:"222 Cambridge St, Boston. Near Science Museum end of Esplanade. Customer restroom — purchase may be expected.", hours:"Daily 5am-9pm"},
+  {id:140, name:"Starbucks - Brookline Village", lat:42.3337, lng:-71.1187, cat:"coffee", seasonal:false,
+   desc:"15 Harvard St, Brookline. Near Emerald Necklace path to Jamaica Pond. Customer restroom — purchase may be expected.", hours:"Daily 5am-7:30pm"},
+
+  // Missing BPL Library Branches
+  {id:141, name:"BPL - Roslindale Branch", lat:42.2856, lng:-71.1286, cat:"public_bldg", seasonal:false,
+   desc:"4246 Washington St (Roslindale). Boston Public Library branch with public restrooms.", hours:"M-W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm"},
+  {id:142, name:"BPL - Connolly Branch (Jamaica Plain)", lat:42.3207, lng:-71.1111, cat:"public_bldg", seasonal:false,
+   desc:"433 Centre St (Jamaica Plain). Boston Public Library branch with public restrooms.", hours:"M 12-8pm, Tu-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm"},
+  {id:143, name:"BPL - Adams Street Branch", lat:42.2863, lng:-71.0545, cat:"public_bldg", seasonal:false,
+   desc:"690 Adams St (Dorchester). Boston Public Library branch with public restrooms.", hours:"M 12-8pm, Tu 10am-6pm, W 12-8pm, Th 10am-6pm, F-Sa 9am-5pm"},
+  {id:144, name:"BPL - Fields Corner Branch", lat:42.2984, lng:-71.0603, cat:"public_bldg", seasonal:false,
+   desc:"1520 Dorchester Ave (Dorchester). Boston Public Library branch with public restrooms. Note: closed for construction until summer 2026.", hours:"M 10am-6pm, Tu 12-8pm, W-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm"},
+  {id:145, name:"BPL - Lower Mills Branch", lat:42.2735, lng:-71.0684, cat:"public_bldg", seasonal:false,
+   desc:"27 Richmond St (Dorchester). Boston Public Library branch with public restrooms.", hours:"M 12-8pm, Tu-W 10am-6pm, Th 12-8pm, F 9am-5pm, Sa 9am-2pm"},
+  {id:146, name:"BPL - Shaw-Roxbury Branch", lat:42.3281, lng:-71.0836, cat:"public_bldg", seasonal:false,
+   desc:"149 Dudley St (Roxbury/Nubian Sq). Boston Public Library branch with public restrooms.", hours:"M 12-8pm, Tu-Th 10am-6pm, F 9am-5pm, Sa 9am-2pm"},
+  {id:147, name:"BPL - Parker Hill Branch", lat:42.3324, lng:-71.0991, cat:"public_bldg", seasonal:false,
+   desc:"1497 Tremont St (Mission Hill). Boston Public Library branch with public restrooms.", hours:"M 10am-6pm, Tu 12-8pm, W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm"},
+  {id:148, name:"BPL - Mattapan Branch", lat:42.2775, lng:-71.0933, cat:"public_bldg", seasonal:false,
+   desc:"1350 Blue Hill Ave (Mattapan). Boston Public Library branch with public restrooms.", hours:"M 10am-6pm, Tu 12-8pm, W 10am-6pm, Th 12-8pm, F-Sa 9am-5pm"}
 ];
 
 // Locations that also have drinking water fountains / bubblers
@@ -501,6 +558,7 @@ const waterFountainIds = new Set([
   24, 27, 28, 29, 110, 111,
   // Libraries (indoor fountains / bottle refill stations)
   32, 33, 56, 60, 61, 64, 69, 73, 74, 75, 87, 91, 92, 103, 104, 105, 108, 117, 118,
+  141, 142, 143, 144, 145, 146, 147, 148,
   // City/Town Halls & Public Buildings
   30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119,
   // Hospitals & Health Centers (indoor fountains)
@@ -509,6 +567,8 @@ const waterFountainIds = new Set([
   16, 63, 67, 68, 77, 78, 81, 82, 86, 88, 95, 101, 107, 114, 121, 123, 124,
   // Attractions & Museums
   50, 53, 57, 84, 85,
+  // Hotel Lobbies (indoor fountains / water stations)
+  55, 59, 125, 126, 127, 128, 129, 130,
   // Retail / Malls
   52, 122
 ]);
@@ -551,6 +611,8 @@ const catColors = {
   recreation_centers: "#56B4E9", // sky blue - cool distinct
   sports_fields: "#009E73",   // teal/green - cool
   attractions: "#0072B2",     // dark blue - different from sports
+  coffee: "#6F4E37",          // coffee brown - warm distinct
+  hotel: "#8B5CF6",           // purple - distinct
   other: "#999999"            // gray - neutral
 };
 
@@ -563,7 +625,9 @@ const catNames = {
   recreation_centers: "Recreation Centers",
   sports_fields: "Sports Facilities",
   attractions: "Attractions (Museums, Zoo, etc)",
-  other: "Other (retail, hotels, etc.)"
+  coffee: "Coffee Shops",
+  hotel: "Hotel Lobbies",
+  other: "Other (retail, etc.)"
 };
 
 const map = L.map('map').setView([42.3620, -71.1050], 13);
@@ -580,6 +644,153 @@ Object.keys(catColors).forEach(c => categoryVisible[c] = true);
 let seasonalVisible = true;
 let yearRoundVisible = true;
 let fountainVisible = false;
+let openNowVisible = false;
+
+// Structured hours: locationId → day-of-week hours or shorthand
+// Format: { mon:[open,close], tue:[open,close], ... } or [0,24] for 24hr or null for unknown
+// Day keys: sun, mon, tue, wed, thu, fri, sat  |  Hours in 24hr format
+const hoursData = {
+  // Seasonal / unknown — null means "hours unknown"
+  1:null, 2:null, 3:null, 4:null, 5:null, 6:null, 7:null, 8:null, 9:null, 10:null,
+  11:null, 12:null, 13:null, 14:null, 20:null, 48:null, 49:null, 51:null,
+  62:null, 65:null, 96:null, 97:null, 98:null, 120:null, 121:null,
+  // 24/7 locations
+  23:[0,24], 26:[0,24], 47:[0,24], 70:[0,24], 71:[0,24], 72:[0,24], 79:[0,24], 89:[0,24],
+  94:[0,24],
+  // Fresh Pond Ranger Station
+  15:{mon:[7,17],tue:[7,17],wed:[7,17],thu:[7,17],fri:[7,17],sat:[7,17],sun:[7,17]},
+  // Maynard Ecology Center
+  16:null,
+  // Jamaica Pond Boathouse (dawn-dusk ~6am-8pm)
+  17:{mon:[6,20],tue:[6,20],wed:[6,20],thu:[6,20],fri:[6,20],sat:[6,20],sun:[6,20]},
+  // Arnold Arboretum Hunnewell
+  18:{mon:[10,16],tue:[10,16],wed:[10,16],thu:[10,16],fri:[10,16],sat:[10,16],sun:[10,16]},
+  19:null, // Arborway portables - year-round but no set hours
+  // Franklin Park
+  21:null, 22:null,
+  // Harvard
+  24:{mon:[7,21],tue:[7,21],wed:[7,21],thu:[7,21],fri:[7,21],sat:[7,21],sun:[7,21]},
+  25:null,
+  // MIT
+  27:{mon:[6,19],tue:[6,19],wed:[6,19],thu:[6,19],fri:[6,19],sat:null,sun:null},
+  28:{mon:[7,21],tue:[7,21],wed:[7,21],thu:[7,21],fri:[7,21],sat:[9,18],sun:[9,18]},
+  29:{mon:[6,19],tue:[6,19],wed:[6,19],thu:[6,19],fri:[6,19],sat:null,sun:null},
+  // Cambridge public buildings
+  30:{mon:[8,17],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,17],sat:null,sun:null},
+  31:{mon:[8,17],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,17],sat:null,sun:null},
+  // Cambridge Public Library Main
+  32:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,17],sat:[9,17],sun:[13,17]},
+  33:null, // Boudreau - library hours
+  34:null, // War Memorial
+  // Hospitals
+  35:{mon:[6,20],tue:[6,20],wed:[6,20],thu:[6,20],fri:[6,20],sat:[6,20],sun:[6,20]},
+  36:{mon:[7,21],tue:[7,21],wed:[7,21],thu:[7,21],fri:[7,21],sat:[9,15],sun:null},
+  37:{mon:[8,20],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,17],sat:null,sun:null},
+  38:null, 39:null,
+  40:[0,24], // Mount Auburn Hospital
+  41:null, 42:null, 43:null,
+  // MBTA
+  44:{mon:[5,1],tue:[5,1],wed:[5,1],thu:[5,1],fri:[5,1],sat:[5,1],sun:[6,1]},
+  45:{mon:[5,1],tue:[5,1],wed:[5,1],thu:[5,1],fri:[5,1],sat:[5,1],sun:[6,1]},
+  // Central Sq
+  50:null, 52:null, 53:null, 54:null,
+  // Hotels (24hr lobbies)
+  55:[0,24], 59:[0,24], 125:[0,24], 126:[0,24], 127:[0,24], 128:[0,24], 129:[0,24], 130:[0,24],
+  // BPL Central
+  56:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,17],sat:[9,17],sun:[13,17]},
+  57:null, // Faneuil Hall
+  58:{mon:[9,17],tue:[9,17],wed:[9,17],thu:[9,17],fri:[9,17],sat:null,sun:null},
+  // BPL branches
+  60:null, 61:null, 63:null, 64:null, 66:null,
+  67:null, 68:null, 69:null, 73:null, 74:null, 75:null, 76:null,
+  77:null, 78:null, 80:null, 81:null, 82:null, 83:null, 84:null, 85:null,
+  86:null, 87:null, 88:null, 90:null,
+  // Brookline
+  91:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,17],sat:[9,17],sun:[13,17]},
+  92:null,
+  93:{mon:[8,17],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,12],sat:null,sun:null},
+  95:null, 99:null, 100:null,
+  // Oak Square YMCA
+  101:{mon:[6,22],tue:[6,22],wed:[6,22],thu:[6,22],fri:[6,19],sat:[7,17],sun:[8,16]},
+  102:null,
+  // Brighton Library
+  103:{mon:[12,20],tue:[10,18],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,17],sun:null},
+  // Somerville
+  104:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,17],sat:[9,17],sun:[13,17]},
+  105:null,
+  106:[0,24], // CHA Somerville
+  107:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,21],sat:[7,20],sun:[7,20]},
+  // Medford
+  108:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,18],sat:[9,17],sun:null},
+  109:null,
+  110:null, 111:null,
+  112:{mon:[5,1],tue:[5,1],wed:[5,1],thu:[5,1],fri:[5,1],sat:[5,1],sun:[5,1]},
+  113:null, 114:null, 115:null, 116:{mon:[9,16],tue:[9,16],wed:[9,16],thu:[9,16],fri:[9,16],sat:null,sun:null},
+  // Newton / Chestnut Hill
+  117:{mon:[9,21],tue:[9,21],wed:[9,21],thu:[9,21],fri:[9,18],sat:[9,17],sun:[13,17]},
+  118:null,
+  119:{mon:[8,17],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,17],sat:null,sun:null},
+  122:{mon:[10,21],tue:[10,21],wed:[10,21],thu:[10,21],fri:[10,21],sat:[10,21],sun:[11,18]},
+  123:null, 124:null,
+  // Coffee shops (verified Feb 2026)
+  131:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,21],sat:[5,21],sun:[5,21]},
+  132:{mon:[4,21],tue:[4,21],wed:[4,21],thu:[4,21],fri:[4,21],sat:[5,21],sun:[5,21]},
+  133:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,22],sat:[5,22],sun:[5,21]},
+  134:{mon:[5,19],tue:[5,19],wed:[5,19],thu:[5,19],fri:[5,19],sat:[5,19],sun:[6,19]},
+  135:{mon:[5,19],tue:[5,19],wed:[5,19],thu:[5,19],fri:[5,19],sat:[5,19],sun:[6,19]},
+  136:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,21],sat:[5,21],sun:[5,21]},
+  137:{mon:[4,20],tue:[4,20],wed:[4,20],thu:[4,20],fri:[4,20],sat:[5,20],sun:[5,20]},
+  138:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,21],sat:[5,21],sun:[5,21]},
+  139:{mon:[5,21],tue:[5,21],wed:[5,21],thu:[5,21],fri:[5,21],sat:[5,21],sun:[5,21]},
+  140:{mon:[5,19],tue:[5,19],wed:[5,19],thu:[5,19],fri:[5,19],sat:[5,19],sun:[5,19]},
+  // New BPL branches (hours from bpl.org)
+  141:{mon:[10,18],tue:[10,18],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,17],sun:null},
+  142:{mon:[12,20],tue:[10,18],wed:[10,18],thu:[10,18],fri:[9,17],sat:[9,14],sun:null},
+  143:{mon:[12,20],tue:[10,18],wed:[12,20],thu:[10,18],fri:[9,17],sat:[9,17],sun:null},
+  144:{mon:[10,18],tue:[12,20],wed:[10,18],thu:[10,18],fri:[9,17],sat:[9,14],sun:null},
+  145:{mon:[12,20],tue:[10,18],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,14],sun:null},
+  146:{mon:[12,20],tue:[10,18],wed:[10,18],thu:[10,18],fri:[9,17],sat:[9,14],sun:null},
+  147:{mon:[10,18],tue:[10,18],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,14],sun:null},
+  148:{mon:[10,18],tue:[12,20],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,17],sun:null},
+};
+
+function isOpenNow(locId) {
+  const loc = locations.find(l => l.id === locId);
+  if (!loc) return 'unknown';
+
+  // Seasonal check: if seasonal and outside mid-Apr to mid-Oct, closed
+  if (loc.seasonal) {
+    const now = new Date();
+    const month = now.getMonth(); // 0-indexed
+    const day = now.getDate();
+    // mid-Apr (month 3, day 15) to mid-Oct (month 9, day 15)
+    const inSeason = (month > 3 && month < 9) ||
+      (month === 3 && day >= 15) ||
+      (month === 9 && day <= 15);
+    if (!inSeason) return 'closed';
+  }
+
+  const hours = hoursData[locId];
+  if (hours === undefined || hours === null) return 'unknown';
+
+  // 24hr shorthand
+  if (Array.isArray(hours) && hours[0] === 0 && hours[1] === 24) return 'open';
+
+  const now = new Date();
+  const dayNames = ['sun','mon','tue','wed','thu','fri','sat'];
+  const dayKey = dayNames[now.getDay()];
+  const currentHour = now.getHours() + now.getMinutes() / 60;
+
+  const dayHours = hours[dayKey];
+  if (dayHours === undefined || dayHours === null) return 'closed';
+
+  const [openH, closeH] = dayHours;
+  if (closeH <= openH) {
+    // Wraps past midnight (e.g., [5,1] means 5am to 1am next day)
+    return (currentHour >= openH || currentHour < closeH) ? 'open' : 'closed';
+  }
+  return (currentHour >= openH && currentHour < closeH) ? 'open' : 'closed';
+}
 
 function createIcon(color, is24hr, catKey, hasWaterFountain) {
   const size = is24hr ? 36 : 32;
@@ -594,6 +805,8 @@ function createIcon(color, is24hr, catKey, hasWaterFountain) {
     recreation_centers: '🏊',
     sports_fields: '⚽',
     attractions: '★',
+    coffee: '☕',
+    hotel: '🏨',
     other: '•'
   };
 
@@ -654,26 +867,40 @@ function createFountainIcon() {
   });
 }
 
-locations.forEach(loc => {
-  const color = catColors[loc.cat];
+function buildPopup(loc) {
   const hasWf = waterFountainIds.has(loc.id);
-  const icon = createIcon(color, loc.is24hr, loc.cat, hasWf);
   const seasonTag = loc.seasonal
     ? '<span class="popup-tag tag-seasonal">SEASONAL</span>'
     : '<span class="popup-tag tag-yearround">YEAR-ROUND</span>';
   const hrTag = loc.is24hr ? ' <span class="popup-tag tag-24hr">24 HR</span>' : '';
   const wfTag = hasWf ? ' <span class="popup-tag tag-fountain">WATER FOUNTAIN</span>' : '';
 
-  const popup = `
+  const status = isOpenNow(loc.id);
+  let statusTag = '';
+  if (status === 'open') statusTag = ' <span class="popup-tag tag-open">OPEN NOW</span>';
+  else if (status === 'closed') statusTag = ' <span class="popup-tag tag-closed">CLOSED</span>';
+  else statusTag = ' <span class="popup-tag tag-unknown">HOURS UNKNOWN</span>';
+
+  return `
     <div class="popup-title">#${loc.id} ${loc.name}</div>
-    ${seasonTag}${hrTag}${wfTag}<br>
+    ${seasonTag}${hrTag}${wfTag}${statusTag}<br>
     ${loc.desc}<br>
     <strong>Hours:</strong> ${loc.hours}<br>
     <em style="font-size:11px;color:#666;">${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}</em>
   `;
+}
 
-  const marker = L.marker([loc.lat, loc.lng], {icon})
-    .bindPopup(popup);
+locations.forEach(loc => {
+  const color = catColors[loc.cat];
+  const hasWf = waterFountainIds.has(loc.id);
+  const icon = createIcon(color, loc.is24hr, loc.cat, hasWf);
+
+  const marker = L.marker([loc.lat, loc.lng], {icon});
+  // Bind popup dynamically so open/closed status is always current
+  marker.on('click', function() {
+    this.unbindPopup();
+    this.bindPopup(buildPopup(loc)).openPopup();
+  });
   marker._locData = loc;
   marker.addTo(map);
   markers.push(marker);
@@ -705,7 +932,8 @@ function updateVisibility() {
     const loc = m._locData;
     const catOk = categoryVisible[loc.cat];
     const seaOk = loc.seasonal ? seasonalVisible : yearRoundVisible;
-    if (catOk && seaOk) {
+    const openOk = !openNowVisible || isOpenNow(loc.id) !== 'closed';
+    if (catOk && seaOk && openOk) {
       m.addTo(map);
     } else {
       map.removeLayer(m);
@@ -742,6 +970,8 @@ const symbols = {
   recreation_centers: '🏊',
   sports_fields: '⚽',
   attractions: '★',
+  coffee: '☕',
+  hotel: '🏨',
   other: '•'
 };
 
@@ -795,6 +1025,7 @@ legend.onAdd = function() {
   div.innerHTML += '<div class="legend-item dimmed" data-toggle="fountains"><div class="legend-dot" style="background:#2196F3">🚰</div>Water Fountains</div>';
   div.innerHTML += '<div class="legend-item" data-toggle="yearround"><div class="legend-dot" style="background:#28a745">❄️</div>Year-round</div>';
   div.innerHTML += '<div class="legend-item" data-toggle="seasonal"><div class="legend-dot" style="background:#fd7e14">☀️</div>Seasonal</div>';
+  div.innerHTML += '<div class="legend-item dimmed" data-toggle="opennow"><div class="legend-dot" style="background:#28a745">🕐</div>Open Now</div>';
 
   div.innerHTML += '<div class="legend-separator"></div>';
   div.innerHTML += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
@@ -818,6 +1049,7 @@ legend.onAdd = function() {
       if (toggle === 'yearround') yearRoundVisible = active;
       else if (toggle === 'seasonal') seasonalVisible = active;
       else if (toggle === 'fountains') fountainVisible = active;
+      else if (toggle === 'opennow') openNowVisible = active;
       updateVisibility();
     });
   });
@@ -875,6 +1107,7 @@ legend.addTo(map);
     html += `<div class="legend-item${fountainVisible ? '' : ' dimmed'}" data-toggle="fountains"><div class="legend-dot" style="background:#2196F3">🚰</div>Water Fountains</div>`;
     html += `<div class="legend-item${yearRoundVisible ? '' : ' dimmed'}" data-toggle="yearround"><div class="legend-dot" style="background:#28a745">❄️</div>Year-round</div>`;
     html += `<div class="legend-item${seasonalVisible ? '' : ' dimmed'}" data-toggle="seasonal"><div class="legend-dot" style="background:#fd7e14">☀️</div>Seasonal</div>`;
+    html += `<div class="legend-item${openNowVisible ? '' : ' dimmed'}" data-toggle="opennow"><div class="legend-dot" style="background:#28a745">🕐</div>Open Now</div>`;
     html += '<div class="legend-separator"></div>';
     html += '<button class="download-btn" onclick="downloadCSV()">📥 Download for Google Maps</button>';
 
@@ -902,6 +1135,7 @@ legend.addTo(map);
         if (toggle === 'yearround') yearRoundVisible = active;
         else if (toggle === 'seasonal') seasonalVisible = active;
         else if (toggle === 'fountains') fountainVisible = active;
+        else if (toggle === 'opennow') openNowVisible = active;
         // Sync desktop legend
         const desktopItem = document.querySelector(`.legend [data-toggle="${toggle}"]`);
         if (desktopItem) desktopItem.classList.toggle('dimmed', !active);
