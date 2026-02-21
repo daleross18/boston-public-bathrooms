@@ -359,7 +359,19 @@ const locations = [
   {id:154, name:"BPL - Egleston Square Branch", lat:42.3142, lng:-71.0956, cat:"public_bldg", seasonal:false,
    desc:"2044 Columbus Ave (Roxbury). Boston Public Library branch with public restrooms. Near Stony Brook station on SW Corridor path.", hours:"M-Tu 10am-6pm, W 12-8pm, Th 10am-6pm, F 9am-5pm, Sa 9am-2pm"},
   {id:155, name:"Forest Hills Station (Orange Line)", lat:42.3007, lng:-71.1139, cat:"transit", seasonal:false,
-   desc:"3699 Washington St (Jamaica Plain). Major transit hub at south end of SW Corridor bike path. Restrooms inside fare gates. Near Arnold Arboretum.", hours:"During MBTA service (~5am-1am)"}
+   desc:"3699 Washington St (Jamaica Plain). Major transit hub at south end of SW Corridor bike path. Restrooms inside fare gates. Near Arnold Arboretum.", hours:"During MBTA service (~5am-1am)"},
+
+  // Ball Square / Magoun Square (Somerville)
+  {id:156, name:"Somerville Public Library - West Branch", lat:42.3981, lng:-71.1217, cat:"public_bldg", seasonal:false,
+   desc:"40 College Ave (Ball Square). Renovated Carnegie library with accessible public restrooms. Near Community Path.", hours:"M,W 9am-9pm, Tu,Th,F 9am-6pm, Sa 9am-1pm"},
+  {id:157, name:"Trum Field", lat:42.3969, lng:-71.1074, cat:"sports_fields", seasonal:true,
+   desc:"1 Franey Rd (between Ball Sq & Magoun Sq). Sloane Field House with ADA-accessible restrooms, open during games/events. Seasonal porta-potties.", hours:"Seasonal: restrooms during games/events"},
+
+  // Winter Hill (Somerville)
+  {id:158, name:"Somerville Fire Dept Headquarters", lat:42.3909, lng:-71.0912, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"266 Broadway (Winter Hill). Fire station with 24-hour public restroom access.", hours:"24/7"},
+  {id:159, name:"Foss Park", lat:42.3927, lng:-71.0865, cat:"parks", seasonal:true,
+   desc:"49 Fellsway W (Winter Hill). DCR park with seasonal porta-potties and locker room restrooms.", hours:"Seasonal"}
 ];
 
 // Locations that also have drinking water fountains / bubblers
@@ -367,14 +379,14 @@ const waterFountainIds = new Set([
   // Charles River / Esplanade (seasonal outdoor fountains, mid-Apr to mid-Oct)
   1, 2, 3, 7, 8, 9, 12, 13, 14,
   // Parks with confirmed outdoor drinking fountains
-  15, 17, 18, 22, 49, 51, 62, 65, 90, 96, 97, 98,
+  15, 17, 18, 22, 49, 51, 62, 65, 90, 96, 97, 98, 157, 159,
   // Universities (indoor fountains in publicly accessible buildings)
   24, 27, 28, 29, 110, 111,
   // Libraries (indoor fountains / bottle refill stations)
   32, 33, 56, 60, 61, 64, 69, 73, 74, 75, 87, 91, 92, 103, 104, 105, 108, 117, 118,
-  141, 142, 143, 144, 145, 146, 147, 148,
+  141, 142, 143, 144, 145, 146, 147, 148, 156,
   // City/Town Halls & Public Buildings
-  30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119,
+  30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119, 158,
   // Hospitals & Health Centers (indoor fountains)
   35, 36, 37, 38, 39, 40, 41, 42, 43, 80, 102, 106, 113,
   // Recreation Centers / YMCAs / Pools
@@ -521,4 +533,10 @@ const hoursData = {
   146:{mon:[12,20],tue:[10,18],wed:[10,18],thu:[10,18],fri:[9,17],sat:[9,14],sun:null},
   147:{mon:[10,18],tue:[10,18],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,14],sun:null},
   148:{mon:[10,18],tue:[12,20],wed:[10,18],thu:[12,20],fri:[9,17],sat:[9,17],sun:null},
+  // Ball Square / Magoun Square
+  156:{mon:[9,21],tue:[9,18],wed:[9,21],thu:[9,18],fri:[9,18],sat:[9,13],sun:null},
+  157:null,
+  // Winter Hill
+  158:[0,24],
+  159:null,
 };
