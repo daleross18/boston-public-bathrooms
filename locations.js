@@ -371,7 +371,27 @@ const locations = [
   {id:158, name:"Somerville Fire Dept Headquarters", lat:42.3909, lng:-71.0912, cat:"public_bldg", seasonal:false, is24hr:true,
    desc:"266 Broadway (Winter Hill). Fire station with 24-hour public restroom access.", hours:"24/7"},
   {id:159, name:"Foss Park", lat:42.3927, lng:-71.0865, cat:"parks", seasonal:true,
-   desc:"49 Fellsway W (Winter Hill). DCR park with seasonal porta-potties and locker room restrooms.", hours:"Seasonal"}
+   desc:"49 Fellsway W (Winter Hill). DCR park with seasonal porta-potties and locker room restrooms.", hours:"Seasonal"},
+
+  // Allston / Brighton
+  {id:160, name:"BPL - Honan-Allston Branch", lat:42.3601, lng:-71.1277, cat:"public_bldg", seasonal:false,
+   desc:"300 N Harvard St (Allston). Boston Public Library branch with wheelchair-accessible restrooms and changing tables.", hours:"M,W 12-8pm, Tu,Th 10am-6pm, F-Sa 9am-5pm"},
+  {id:161, name:"BPL - Faneuil Branch", lat:42.3513, lng:-71.1679, cat:"public_bldg", seasonal:false,
+   desc:"419 Faneuil St (Brighton). Boston Public Library branch with restrooms. Stairs required.", hours:"M,W-Th 10am-6pm, Tu 12-8pm, F 9am-5pm, Sa 9am-2pm"},
+  {id:162, name:"BCYF Jackson/Mann Community Center", lat:42.3527, lng:-71.1376, cat:"recreation_centers", seasonal:false,
+   desc:"500 Cambridge St (Allston). Community center with public restrooms. Programs for all ages.", hours:"M-F 7:30am-9pm"},
+  {id:163, name:"Boston Fire Dept Engine 29 / Ladder 11", lat:42.3427, lng:-71.1535, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"138 Chestnut Hill Ave (Brighton). Wheelchair-accessible unisex restroom open 24/7.", hours:"24/7"},
+  {id:164, name:"Boston Fire Dept Engine 51", lat:42.3513, lng:-71.1682, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"425 Faneuil St (Brighton). Wheelchair-accessible unisex restroom open 24/7.", hours:"24/7"},
+  {id:165, name:"Boston Police District D-14", lat:42.3494, lng:-71.1505, cat:"public_bldg", seasonal:false, is24hr:true,
+   desc:"301 Washington St (Brighton). Wheelchair-accessible unisex restroom open 24/7.", hours:"24/7"},
+
+  // North Brookline
+  {id:166, name:"Waldstein Playground (Dean Park)", lat:42.3365, lng:-71.1431, cat:"parks", seasonal:true,
+   desc:"Dean Rd (Brookline). Park with restroom building, open daytime hours spring through fall.", hours:"Seasonal: spring-fall daytime"},
+  {id:167, name:"Brookline Senior Center", lat:42.3436, lng:-71.1278, cat:"public_bldg", seasonal:false,
+   desc:"93 Winchester St (Brookline). Public restrooms during business hours.", hours:"M-F 8:30am-5pm"}
 ];
 
 // Locations that also have drinking water fountains / bubblers
@@ -384,13 +404,13 @@ const waterFountainIds = new Set([
   24, 27, 28, 29, 110, 111,
   // Libraries (indoor fountains / bottle refill stations)
   32, 33, 56, 60, 61, 64, 69, 73, 74, 75, 87, 91, 92, 103, 104, 105, 108, 117, 118,
-  141, 142, 143, 144, 145, 146, 147, 148, 156,
+  141, 142, 143, 144, 145, 146, 147, 148, 156, 160, 161,
   // City/Town Halls & Public Buildings
-  30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119, 158,
+  30, 31, 34, 58, 93, 94, 99, 100, 109, 116, 119, 158, 163, 164, 165, 167,
   // Hospitals & Health Centers (indoor fountains)
   35, 36, 37, 38, 39, 40, 41, 42, 43, 80, 102, 106, 113,
   // Recreation Centers / YMCAs / Pools
-  16, 63, 67, 68, 77, 78, 81, 82, 86, 88, 95, 101, 107, 114, 121, 123, 124,
+  16, 63, 67, 68, 77, 78, 81, 82, 86, 88, 95, 101, 107, 114, 121, 123, 124, 162,
   // Attractions & Museums
   50, 53, 57, 84, 85,
   // Hotel Lobbies (indoor fountains / water stations)
@@ -539,4 +559,14 @@ const hoursData = {
   // Winter Hill
   158:[0,24],
   159:null,
+  // Allston / Brighton
+  160:{mon:[12,20],tue:[10,18],wed:[12,20],thu:[10,18],fri:[9,17],sat:[9,17],sun:null},
+  161:{mon:[10,18],tue:[12,20],wed:[10,18],thu:[10,18],fri:[9,17],sat:[9,14],sun:null},
+  162:{mon:[7,21],tue:[7,21],wed:[7,21],thu:[7,21],fri:[7,21],sat:null,sun:null},
+  163:[0,24],
+  164:[0,24],
+  165:[0,24],
+  // North Brookline
+  166:null,
+  167:{mon:[8,17],tue:[8,17],wed:[8,17],thu:[8,17],fri:[8,17],sat:null,sun:null},
 };
